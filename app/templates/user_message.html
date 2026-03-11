@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhatsApp Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e5ddd5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        .chat-header {
+            background: #075e54;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-arrow {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .chat-title {
+            font-weight: 500;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Chat container */
+        .chat-container {
+            flex: 1;
+            padding: 70px 0 80px;
+            overflow-y: auto;
+            background-image: url('https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png');
+            background-repeat: repeat;
+        }
+        
+        .chat-messages {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Message bubbles */
+        .message-container {
+            display: flex;
+            margin-bottom: 8px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            justify-content: flex-end;
+        }
+        
+        .admin-message {
+            align-self: flex-start;
+            justify-content: flex-start;
+        }
+        
+        .message-bubble {
+            padding: 8px 12px;
+            border-radius: 7.5px;
+            position: relative;
+            word-wrap: break-word;
+            max-width: 100%;
+            font-size: 14.2px;
+            line-height: 19px;
+        }
+        
+        .user-bubble {
+            background: #dcf8c6;
+            border-top-right-radius: 0;
+            margin-left: 20px;
+        }
+        
+        .admin-bubble {
+            background: white;
+            border-top-left-radius: 0;
+            margin-right: 20px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: #667781;
+            float: right;
+            margin-left: 8px;
+            margin-top: 2px;
+        }
+        
+        /* Input area */
+        .chat-input-bar {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 21px;
+            padding: 5px 10px;
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .chat-input {
+            border: none;
+            outline: none;
+            width: 40vw;
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 15px;
+            background: transparent;
+        }
+        
+        .emoji-btn, .attach-btn {
+            color: #54656f;
+            font-size: 1.4rem;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .send-btn {
+            background: #075e54;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        .send-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Date separator */
+        .date-separator {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .date-separator span {
+            background: #e1f3fb;
+            color: #54656f;
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #667781;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat header -->
+    <div class="chat-header">
+        <div class="header-left">
+            <a href="/user-home" style="color: white; text-decoration: none;">
+                <i class="fas fa-arrow-left back-arrow"></i>
+            </a>
+            <div>
+                <div class="chat-title">Admin</div>
+                <div style="font-size: 12px;">Online</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-ellipsis-v header-icon"></i>
+        </div>
+    </div>
+    
+    <!-- Chat messages -->
+    <div class="chat-container">
+        <div class="chat-messages">
+            {% if chat %}
+                <div class="date-separator">
+                    <span>TODAY</span>
+                </div>
+                
+                {% for msg in chat %}
+                    <div class="message-container {% if msg.type == 'user' %}user-message{% else %}admin-message{% endif %}">
+                        <div class="message-bubble {% if msg.type == 'user' %}user-bubble{% else %}admin-bubble{% endif %}">
+                            {{ msg.text }}
+                            <span class="message-time">
+                                {{ now.strftime('%I:%M %p') }}
+                                {% if msg.type == 'user' %}
+                                    <i class="fas fa-check-double" style="color: #53bdeb;"></i>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">No messages yet. Start the conversation!</div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Input area -->
+    <div class="chat-input-bar">
+        <i class="fas fa-paperclip attach-btn"></i>
+        <i class="far fa-smile emoji-btn"></i>
+        <form class="chat-input-form" method="POST" action="{{ url_for('user_message') }}" style="display: flex; justify-content: space-around; align-items: center;">
+            <input type="text" name="message" class="chat-input" placeholder="Type a message" autocomplete="off" required>
+            <button type="submit" class="send-btn">
+                <i class="fas fa-paper-plane send-icon"></i>
+            </button>
+        </form>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+   
+</body>
+</html>

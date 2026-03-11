@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>User Messages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        background: #e5ddd5;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
+        overflow: hidden;
+      }
+      
+      nav {
+        background: #128c7e;
+        padding: 1rem 0;
+        margin-bottom: 0;
+        height: 60px;
+      }
+      
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+      
+      .nav-title {
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      
+      .nav-links a {
+        color: #fff;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      
+      .nav-links a:hover {
+        color: #d1fae5;
+      }
+
+      .chat-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        height: calc(100vh - 60px);
+        background: #fff;
+        position: relative;
+      }
+
+      /* Contacts sidebar */
+      .contacts-sidebar {
+        width: 30%;
+        border-right: 1px solid #e1e1e1;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        height: 100%;
+      }
+
+      .contact-header {
+        padding: 15px;
+        background: #f0f2f5;
+        font-weight: bold;
+        border-bottom: 1px solid #e1e1e1;
+        height: 60px;
+        flex-shrink: 0;
+      }
+
+      .contact-list-container {
+        flex: 1;
+        overflow-y: auto;
+        position: relative;
+        height: calc(100% - 60px);
+      }
+
+      .contact-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .contact-item {
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f2f5;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      .contact-item:hover {
+        background: #f5f5f5;
+      }
+
+      .contact-item.active {
+        background: #e5effd;
+      }
+
+      .contact-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .contact-email {
+        font-weight: 500;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .contact-time {
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 3px;
+      }
+
+      /* Chat area */
+      .chat-area {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 100%;
+        background: #e5ddd5;
+        background-image: url("https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png");
+        background-repeat: repeat;
+      }
+
+      .chat-header {
+        padding: 15px;
+        background: #f0f2f5;
+        border-bottom: 1px solid #e1e1e1;
+        font-weight: bold;
+        height: 60px;
+        flex-shrink: 0;
+        z-index: 2;
+      }
+
+      /* Chat messages table container */
+      .chat-table-container {
+        position: absolute;
+        top: 60px;
+        bottom: 62px;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        padding: 20px 80px;
+      }
+
+      /* Chat messages table */
+      .chat-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .chat-table tr {
+        display: flex;
+        margin-bottom: 10px;
+      }
+
+      .chat-table td {
+        padding: 8px 12px;
+        border-radius: 7.5px;
+        max-width: 65%;
+        word-wrap: break-word;
+        font-size: 14.2px;
+        line-height: 19px;
+        position: relative;
+      }
+
+      .incoming {
+        background: #fff;
+        align-self: flex-start;
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        margin-right: auto;
+      }
+
+      .outgoing {
+        background: #d9fdd3;
+        align-self: flex-end;
+        margin-left: auto;
+      }
+
+      .message-time {
+        font-size: 0.6875rem;
+        color: #667781;
+        text-align: right;
+        margin-top: 4px;
+        float: right;
+        padding-left: 10px;
+        position: relative;
+        bottom: -2px;
+      }
+
+      .reply-area {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 15px;
+        background: #f0f2f5;
+        border-top: 1px solid #e1e1e1;
+        height: 62px;
+        z-index: 2;
+      }
+
+      .reply-form {
+        display: flex;
+        align-items: center;
+        height: 42px;
+        width: 100%;
+      }
+
+      .reply-input {
+        flex: 1;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+        height: 100%;
+      }
+
+      .send-button {
+        background: #128c7e;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      
+      .unread-bell {
+        color: #ef4444;
+        margin-left: 8px;
+        font-size: 1.1em;
+        display: flex;
+        align-items: center;
+      }
+      
+      .unread-count {
+        background: #ef4444;
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        padding: 2px 5px;
+        margin-left: 5px;
+        font-weight: bold;
+        min-width: 18px;
+        text-align: center;
+      }
+      
+      .no-messages {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #888;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin: 20px;
+        color: #128c7e;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+
+      .back-link:hover {
+        color: #0a6e5f;
+      }
+      
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #aaa;
+      }
+    </style>
+</head>
+<body>
+    <nav>
+      <div class="nav-container">
+        <a href="{{ url_for('css_editor') }}" class="nav-title">Admin Dashboard</a>
+        <div class="nav-links">
+          <a href="{{ url_for('admin_messages') }}">Messages</a>
+          <a href="{{ url_for('css_editor') }}">Back</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="chat-container">
+      <!-- Contacts sidebar -->
+      <div class="contacts-sidebar">
+        <div class="contact-header">User Messages</div>
+        <div class="contact-list-container">
+          <ul class="contact-list">
+            {% if messages %}
+                {% for msg in messages %}
+                <li class="contact-item {% if loop.first %}active{% endif %}" onclick="showChat('{{ msg.email }}', this)">
+                    <div class="contact-info">
+                        <div class="contact-email">{{ msg.email }}</div>
+                        <div class="contact-time">{{ msg.timestamp.strftime('%Y-%m-%d %H:%M:%S') if msg.timestamp else '' }}</div>
+                    </div>
+                    {% if msg.unread_count > 0 %}
+                        <span class="unread-bell">
+                            <i class="fas fa-bell"></i>
+                            <span class="unread-count">{{ msg.unread_count }}</span>
+                        </span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="no-messages">No messages found</li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Chat area -->
+      <div class="chat-area">
+        {% if messages %} 
+          {% for msg in messages %}
+          <div id="chat-{{ msg.email }}" class="chat-content" style="display: {% if loop.first %}block{% else %}none{% endif %}">
+            <div class="chat-header">{{ msg.email }}</div>
+            <div class="chat-table-container">
+              <table class="chat-table" id="chat-messages-{{ msg.email }}">
+                {% for m in msg.chat %}
+                <tr>
+                  <td class="{% if m.type == 'user' %}incoming{% else %}outgoing{% endif %}">
+                    {{ m.text }}
+                    <div class="message-time">
+                      {{ m.timestamp.strftime('%H:%M') if m.timestamp else '' }}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+            <div class="reply-area">
+              <form class="reply-form" onsubmit="return sendAdminReply('{{ msg.email }}', this)">
+                <input type="text" name="reply" class="reply-input" placeholder="Type a reply..." required>
+                <button type="submit" class="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+          {% endfor %} 
+        {% else %}
+          <div class="no-messages">
+            <div>No messages to display</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="{{ url_for('css_editor') }}" class="back-link">&larr; Back to Dashboard</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+      const socket = io();
+      let currentRoom = null;
+
+      // Join admin notifications room for real-time updates
+      socket.emit('join', {room: 'admin_notifications'});
+
+      function showChat(email, el) {
+        // Hide all chat contents
+        document.querySelectorAll(".chat-content").forEach((chat) => {
+          chat.style.display = "none";
+        });
+        // Remove active class from all contacts
+        document.querySelectorAll(".contact-item").forEach((item) => {
+          item.classList.remove("active");
+        });
+        // Show selected chat and mark contact as active
+        document.getElementById("chat-" + email).style.display = "block";
+        if (el) el.classList.add("active");
+
+        // Remove bell icon and unread count for this contact
+        const bell = el.querySelector(".unread-bell");
+        if (bell) bell.remove();
+
+        // Mark messages as read in the backend
+        fetch(`/admin/mark-messages-read/${email}`, {method: "POST"});
+
+        // Join the selected user's room for real-time updates
+        if (currentRoom !== email) {
+          if (currentRoom) socket.emit('leave', {room: currentRoom});
+          socket.emit('join', {room: email});
+          currentRoom = email;
+        }
+        
+        // Scroll to bottom of chat
+        const chatContainer = document.getElementById(`chat-messages-${email}`).parentNode;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      function sendAdminReply(email, form) {
+        const input = form.querySelector('input[name="reply"]');
+        const reply = input.value.trim();
+        if (reply) {
+          socket.emit("send_admin_reply", {
+            email: email,
+            reply: reply,
+            room: email,
+          });
+          input.value = ""; // Clear input after sending
+          
+          // Add the message to the chat immediately
+          const chatDiv = document.getElementById("chat-messages-" + email);
+          if (chatDiv) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+            cell.className = "outgoing";
+            cell.innerHTML = `
+              ${reply}
+              <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            `;
+            row.appendChild(cell);
+            chatDiv.appendChild(row);
+            chatDiv.parentNode.scrollTop = chatDiv.parentNode.scrollHeight;
+          }
+        }
+        return false; // Prevent form submit
+      }
+
+      // Join the first chat on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        const firstContact = document.querySelector('.contact-item');
+        if (firstContact) {
+          const email = firstContact.querySelector('.contact-email').textContent;
+          socket.emit('join', {room: email});
+          currentRoom = email;
+          
+          // Scroll to bottom of first chat
+          const firstChat = document.getElementById(`chat-messages-${email}`);
+          if (firstChat) {
+            firstChat.parentNode.scrollTop = firstChat.parentNode.scrollHeight;
+          }
+        }
+      });
+
+      // Listen for new messages (admin side, for instant update in open chat)
+      socket.on("receive_message", function (data) {
+        const chatDiv = document.getElementById("chat-messages-" + data.room);
+        if (chatDiv) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.className = data.type === "user" ? "incoming" : "outgoing";
+          cell.innerHTML = `
+            ${data.text}
+            <div class="message-time">${data.timestamp}</div>
+          `;
+          row.appendChild(cell);
+          chatDiv.appendChild(row);
+          chatDiv.parentNode.scrollTop = chatDiv.parentNode.scrollHeight;
+        }
+        
+        // Update unread count in contacts sidebar
+        const contactList = document.querySelectorAll(".contact-item");
+        contactList.forEach(item => {
+          if (item.querySelector(".contact-email").textContent === data.room) {
+            let bell = item.querySelector(".unread-bell");
+            let count = item.querySelector(".unread-count");
+            if (!bell) {
+              bell = document.createElement("span");
+              bell.className = "unread-bell";
+              bell.innerHTML = `<i class="fas fa-bell"></i><span class="unread-count">1</span>`;
+              item.appendChild(bell);
+            } else {
+              let num = parseInt(count.textContent) || 0;
+              count.textContent = num + 1;
+            }
+            
+            // Move this contact to the top if it's not active
+            if (!item.classList.contains('active')) {
+              item.parentNode.prepend(item);
+            }
+          }
+        });
+      });
+
+      // Listen for new user messages (even from new users) and update sidebar in real time
+      socket.on("admin_new_message", function (data) {
+        // Try to find the contact in the sidebar
+        let found = false;
+        document.querySelectorAll(".contact-item").forEach(item => {
+          if (item.querySelector(".contact-email").textContent === data.email) {
+            found = true;
+            // Move this contact to the top
+            item.parentNode.prepend(item);
+            // Update unread bell
+            let bell = item.querySelector(".unread-bell");
+            let count = item.querySelector(".unread-count");
+            if (!bell) {
+              bell = document.createElement("span");
+              bell.className = "unread-bell";
+              bell.innerHTML = `<i class="fas fa-bell"></i><span class="unread-count">1</span>`;
+              item.appendChild(bell);
+            } else {
+              let num = parseInt(count.textContent) || 0;
+              count.textContent = num + 1;
+            }
+          }
+        });
+        // If not found, reload the page to show the new contact (quick solution)
+        if (!found) {
+          location.reload();
+        }
+      });
+    </script>
+</body>
+</html>

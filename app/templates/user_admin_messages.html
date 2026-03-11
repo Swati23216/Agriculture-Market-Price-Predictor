@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Messages</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+      }
+      .container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        padding: 32px 24px;
+      }
+      h2 {
+        color: #4f46e5;
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .message-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 18px 20px;
+        margin-bottom: 18px;
+        background: #f9fafb;
+      }
+      .subject {
+        font-weight: bold;
+        color: #3730a3;
+        margin-bottom: 6px;
+      }
+      .timestamp {
+        color: #888;
+        font-size: 0.95em;
+        margin-bottom: 8px;
+      }
+      .attachment-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #2563eb;
+        text-decoration: underline;
+      }
+      .empty {
+        text-align: center;
+        color: #888;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Messages from Admin</h2>
+      {% if messages %} {% for msg in messages %}
+      <div class="message-card">
+        <div class="subject">{{ msg.subject }}</div>
+        <div class="timestamp">
+          {{ msg.timestamp.strftime('%b %d, %Y %I:%M %p') }}
+        </div>
+        <div class="body">{{ msg.message }}</div>
+        {% if msg.attachment %}
+        <a
+          class="attachment-link"
+          href="{{ url_for('download_admin_message', filename=msg.attachment) }}"
+          target="_blank"
+        >
+          📎 Download Attachment
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %} {% else %}
+      <div class="empty">No messages from admin yet.</div>
+      {% endif %}
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // When page loads, mark messages as read
+        fetch("/mark-admin-messages-read", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then(() => {
+          document.getElementById("notification-count").style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

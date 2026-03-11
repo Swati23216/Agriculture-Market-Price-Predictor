@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Market Predictions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #81c784;
+            --secondary: #ff8f00;
+            --dark: #263238;
+            --light: #f5f5f5;
+            --accent: #ff5722;
+            --text: #333333;
+            --text-light: #757575;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --radius: 8px;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* About Section */
+        .about {
+            background-color: #f9f9f9;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-image img {
+            display: block;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(5.05);
+        }
+
+        /* Services Section */
+        .services {
+            background-color: var(--white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .service-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-img img {
+            transform: scale(1.1);
+        }
+
+        .service-content {
+            padding: 1.5rem;
+        }
+
+        .service-content h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .service-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: #f9f9f9;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .contact-text h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .contact-text p, .contact-text a {
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .contact-text a:hover {
+            color: var(--primary);
+        }
+
+        .contact-form {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-col p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Page content system */
+        .page-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: var(--white);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                gap: 1.5rem;
+                transition: var(--transition);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section {
+                padding: 3rem 0;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Admin edit styles */
+        [contenteditable="true"] {
+            border-bottom: 1px dashed #ccc;
+            padding: 0.25rem;
+            min-height: 1.5em;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: none;
+            background-color: rgba(46, 125, 50, 0.1);
+            border-bottom: 1px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2777/2777154.png" alt="FarmPredict Logo">
+                    <span class="logo-text">Agricultural Market Prices Predictions</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#home" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')">About</a></li>
+                    <!-- <li><a href="#services" onclick="showPage('services')">Services</a></li> -->
+                    <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
+                    <li><a href="register" onclick="showPage('Register')">Register</a></li>
+                    <li><a href="login" onclick="showPage('login')">Login</a></li>
+                </ul>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="page-content active">
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1>Smart Farming Starts With Smart Predictions</h1>
+                        <p>AI-powered agricultural market insights to maximize your profits and minimize risks in today's volatile market</p>
+                        <div class="hero-btns">
+                            <!-- <a href="#services" class="btn btn-primary" onclick="showPage('services')">Our Services</a> -->
+                            <a href="#contact" class="btn btn-outline" onclick="showPage('contact')">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section features">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Why Choose Our Platform?</h2>
+                        <p>We combine cutting-edge technology with agricultural expertise to deliver actionable insights</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Market Crash Protection</h3>
+                            <p>Instant alerts when prices plummet, with emergency strategies to safeguard your income and investments.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3>Smart Forecasting Engine</h3>
+                            <p>Machine learning analyzes weather patterns, global trends and satellite data to predict prices 30-60 days ahead.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-tractor"></i>
+                            </div>
+                            <h3>Personalized Farm Advice</h3>
+                            <p>Tailored selling strategies for your specific crops, soil conditions and local market dynamics.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="background-color: #f5f9f5;">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Latest Market Insights</h2>
+                        <p>Stay informed with real-time agricultural market updates and trends</p>
+                    </div>
+                    <div class="about-content">
+                        <div class="about-text">
+                            <div class="news-item" style="margin-bottom: 2rem;">
+                                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Wheat Prices Surge</h3>
+                                <p style="color: var(--text);">Wheat prices expected to rise 15-20% due to drought conditions in major producing regions and increased global demand.</p>
+                            </div>
+                            <div class="news-item" style="margin-bottom: 2rem;">
+                                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Soybean Subsidies</h3>
+                                <p style="color: var(--text);">New government subsidies announced for soybean farmers - effective next harvest season with simplified application process.</p>
+                            </div>
+                            <div class="news-item">
+                                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Corn Market Outlook</h3>
+                                <p style="color: var(--text);">Corn prices stabilizing after early season volatility, with expected moderate gains through Q3 based on our predictive models.</p>
+                            </div>
+                        </div>
+                        <div class="about-image">
+                            <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Farmers analyzing market data">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- About Page -->
+        <section id="about" class="page-content">
+            <section class="section about">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>About Agricultural Market Predictions</h2>
+                        <p>Transforming agricultural decision-making through data science and AI</p>
+                    </div>
+                                <!-- Our Services button removed -->
+                        <div class="about-text">
+                            <h3>Our History</h3>
+                            <p>Founded in 2025 by a team of agri-tech experts and data scientists, Agricultural Market Prices Predictions has grown from simple price alerts to comprehensive AI-driven market intelligence serving farmers across North America. Our journey began with a single question: How can we help farmers make better decisions in an increasingly complex global market?</p>
+                            
+                            <h3 style="margin-top: 2rem;">Our Mission</h3>
+                            <p>To empower every farmer with accurate price predictions and actionable insights, turning market uncertainty into competitive advantage. We believe knowledge should be accessible to all farmers, regardless of operation size.</p>
+                            
+                            <h3 style="margin-top: 2rem;">Our Values</h3>
+                            <ul style="list-style-type: none;">
+                                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 0.5rem;"></i> Farmer-First: Tools designed by farmers, for farmers</li>
+                                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 0.5rem;"></i> Data Integrity: Uncompromising accuracy in every prediction</li>
+                                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 0.5rem;"></i> Tech Meets Soil: Cutting-edge AI for real-world problems</li>
+                                <li><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 0.5rem;"></i> Shared Growth: Profitable farms build thriving communities</li>
+                            </ul>
+                        </div>
+                        <div class="about-image">
+                            <img src="data:image/jpeg;base64,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" alt="FarmPredict team">
+                        
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="background-color: var(--white);">
+                <!-- <div class="container">
+                    <div class="section-title">
+                        <h2>Our Technology</h2>
+                        <p>The science behind our accurate predictions</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Data Aggregation</h3>
+                            <p>We collect and analyze data from over 50 sources including weather stations, satellite imagery, commodity exchanges and government reports.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>Machine Learning</h3>
+                            <p>Our proprietary algorithms continuously learn from market patterns to improve prediction accuracy over time.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <h3>Localized Models</h3>
+                            <p>Regional-specific models account for local conditions that affect crop prices differently across geographies.</p>
+                        </div>
+                    </div>
+                </div> -->
+            </section>
+        </section>
+
+        <!-- Services Page -->
+        <!-- <section id="services" class="page-content">
+            <section class="section services">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Our Services</h2>
+                        <p>Comprehensive agricultural market intelligence tools for modern farmers</p>
+                    </div>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://th.bing.com/th/id/OIP.krcNMxVwRO3HdZLUivwgKgHaDm?w=350&h=169&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="AI-Powered Forecasts">
+                            </div>
+                            <div class="service-content">
+                                <h3>AI-Powered </h3>
+                                <p>30-90 day price predictions using machine learning and satellite data analysis with 92% historical accuracy.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="data:image/jpeg;base64,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">
+                            </div>
+                            <div class="service-content">
+                                <h3>Personalized Farm Advice</h3>
+                                <p>Crop-specific recommendations tailored to your land, climate zone and market conditions.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Crop-Specific Price Tracking">
+                            </div>
+                            <div class="service-content">
+                                <h3>Crop-Specific Price Tracking</h3>
+                                <p>Real-time monitoring for wheat, corn, soybeans and 25+ other commodities with historical trends.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Real-Time Price Alerts">
+                            </div>
+                            <div class="service-content">
+                                <h3>Real-Time Price Alerts</h3>
+                                <p>SMS, email and app notifications when market prices hit your predefined thresholds.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAzZZECob3ygOLC2deh89LL-K708S3Fb949Q&s" alt="Risk Management Tools">
+                            </div>
+                            <div class="service-content">
+                                <h3>Risk Management Tools</h3>
+                                <p>Hedging strategies and contract timing recommendations to protect against market volatility.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Nc1LqpuRcrA0g7nH9BxUaqyRosVJjXsKzA&s" alt="Farm Analytics Dashboard">
+                            </div>
+                            <div class="service-content">
+                                <h3>Farm Analytics Dashboard</h3>
+                                <p>Comprehensive visualization of your operation's market position and potential opportunities.</p>
+                                <a href="#" class="btn btn-outline">Learn More</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section> -->
+
+        <!-- Contact Page -->
+        <!-- Contact Page -->
+<section id="contact" class="page-content">
+    <section class="section contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with our agricultural market experts</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Our Office</h3>
+                            <p>VTU Belagavi</p>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Phone</h3>
+                            <p>
+                                Support: 9632239800<br>
+                                Sales: +91 9741166079
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3 style="margin-bottom: 1.5rem;">Visit Us</h3>
+                        <p>Click the button below to open our location in Google Maps:</p>
+                        <a href="https://www.google.com/maps" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" target="_blank">
+                            <i class="fas fa-map-marked-alt" style="margin-right: 8px;"></i> Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 0;">
+       
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15358.016693645155!2d74.45265374699595!3d15.777347757767792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbf6f7d3da7f437%3A0x64791b475c2f2939!2sVisvesvaraya%20Technological%20University%2C%20Machhe%2C%20Belagavi%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1752064296037!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </section>
+</section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Agricultural Market Price Predictions</h3>
+                    <p>Empowering farmers with AI-driven market insights to make better decisions and maximize profits in today's volatile agricultural markets.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#about" onclick="showPage('about')">About Us</a></li>
+                        <li><a href="#services" onclick="showPage('services')">Services</a></li>
+                        <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Our Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Market Predictions</a></li>
+                        <li><a href="#">Risk Analysis</a></li>
+                        <li><a href="#">Crop Planning</a></li>
+                        <li><a href="#">Price Alerts</a></li>
+                        <li><a href="#">Farm Analytics</a></li>
+                        <li><a href="#">Consulting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to our newsletter for weekly market updates and farming insights.</p>
+                    <form style="margin-top: 1rem;">
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Your Email Address" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Agricultural Market Prices Predictions. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the selected page
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Close mobile menu if open
+            document.querySelector('.nav-links').classList.remove('active');
+        }
+        
+        function submitContactForm() {
+            alert("Thank you for your message! Our team will contact you soon.");
+            document.querySelector('.contact-form').reset();
+        }
+
+        // Show home page by default
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!window.location.hash) {
+                showPage('home');
+            } else {
+                showPage(window.location.hash.substring(1));
+            }
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    document.querySelector('header').classList.add('scrolled');
+                } else {
+                    document.querySelector('header').classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

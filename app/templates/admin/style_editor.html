@@ -1,0 +1,21 @@
+{% extends "admin/dashboard.html" %}
+
+{% block content %}
+<div class="style-editor">
+    <h2>Visual Style Editor</h2>
+    
+    <div class="control-group">
+        <label>Theme Color:</label>
+        <input type="color" id="primaryColor" value="{{ styles.primary_color }}">
+    </div>
+    
+    <div class="control-group">
+        <label>Background:</label>
+        <input type="color" id="backgroundColor" value="{{ styles.background_color }}">
+    </div>
+    
+    <button id="saveStyles" class="btn">Apply Changes</button>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

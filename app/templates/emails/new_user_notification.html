@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New User Notification</title>
+</head>
+<body>
+    <h1>New User Registration</h1>
+    <p>Hello {{ admin_name }},</p>
+    <p>A new user has registered and requires approval:</p>
+    <ul>
+        <li>Name: {{ user_name }}</li>
+        <li>Email: {{ user_email }}</li>
+        <li>Requested Role: {{ user_role }}</li>
+    </ul>
+</body>
+</html>

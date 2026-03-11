@@ -1,0 +1,100 @@
+<!-- templates/admin/pending_admins.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pending User Approvals</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f3f4f6; padding: 40px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h2 { color: #4f46e5; margin-bottom: 30px; text-align: center; }
+        table { width: 100%; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #4f46e5; color: #fff; }
+        tr:hover { background: #f9fafb; }
+        .role-badge { 
+            display: inline-block; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            text-transform: capitalize;
+        }
+        .pending-admin { background: #6366f1; color: white; }
+        .pending-doctor { background: #10b981; color: white; }
+        .pending-nurse { background: #3b82f6; color: white; }
+        .pending-staff { background: #f59e0b; color: white; }
+        .approve-btn { 
+            background: #10b981; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s;
+        }
+        .approve-btn:hover { background: #059669; transform: translateY(-2px); }
+        .no-pending { text-align: center; padding: 40px; color: #6b7280; }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pending User Approvals</h2>
+        
+        {% if pending_admins %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Requested Role</th>
+                    <th>Registered On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in pending_admins %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="role-badge pending-{{ user.role.replace('pending_', '') }}">
+                            {{ user.role.replace('pending_', '') }}
+                        </span>
+                    </td>
+                    <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('approve_user', user_id=user._id) }}">
+                            <button type="submit" class="approve-btn">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-pending">
+            <p>No pending user approvals at this time.</p>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="{{ url_for('admin_dashboard') }}" class="back-link">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

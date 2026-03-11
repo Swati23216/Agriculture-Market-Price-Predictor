@@ -1,0 +1,3376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Style Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}" />
+  <style>
+    :root {
+      --primary: #d25126;
+      --primary-light: #818cf8;
+      --primary-dark: #3730a3;
+      --secondary: #10b981;
+      --danger: #bcdc1c;
+      --light: #f9fafb;
+      --dark: #1f2937;
+      --gray: #6b7280;
+      --gray-light: #e5e7eb;
+      --radius: 0.5rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f3f4f6;
+      color: var(--dark);
+      line-height: 1.5;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #231d1d;
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 0 1rem 1rem;
+      border-bottom: 1px solid var(--gray-light);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-header h2 {
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-item {
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      background-color: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+    }
+
+    .nav-link.active {
+      background-color: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+      border-left: 3px solid var(--primary);
+    }
+
+    .nav-link i {
+      margin-right: 0.75rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--gray);
+    }
+
+    .card {
+      background: #716565;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .card-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+
+    input[type="color"] {
+      width: 100%;
+      height: 40px;
+      padding: 0.25rem;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gray-light);
+      color: #fcfcfc;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gray);
+      color: var(--dark);
+    }
+
+    .btn-sm {
+      color: black;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mt-3 {
+      margin-top: 1.5rem;
+    }
+
+    /* Navigation Links Section */
+    .navigation-links-section {
+      margin: 2rem 0 1.5rem;
+      border-top: 1px solid var(--gray-light);
+      padding-top: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .navigation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .nav-link-group {
+      background: rgba(245, 245, 245, 0.5);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--gray-light);
+      transition: var(--transition);
+    }
+
+    .nav-link-group:hover {
+      border-color: var(--primary-light);
+      background: rgba(245, 245, 245, 0.8);
+    }
+
+    .nav-link-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    /* Alert Styles */
+    .alert {
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      animation: fadeIn 0.3s ease-out;
+      display: none;
+    }
+
+    .alert-success {
+      background-color: #ecfdf5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+
+    .alert-error {
+      background-color: #fef2f2;
+      color: #b91c1c;
+      border-left: 4px solid #ef4444;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Spinner Animation */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Preview Styles */
+    .preview-container {
+      position: relative;
+      height: 500px;
+      background: #f0f0f0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1rem;
+      border: 1px solid var(--gray-light);
+    }
+
+    #sitePreview {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    .preview-controls {
+      display: flex;
+      gap: 8px;
+      padding: 8px 0;
+    }
+
+    .preview-notification {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      z-index: 100;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Content Editor Styles */
+    .content-section {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--gray-light);
+      padding-bottom: 1.5rem;
+    }
+
+    .content-section:last-child {
+      border-bottom: none;
+    }
+
+    .content-section h3 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Section Visibility */
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+    }
+
+    /* Add to your existing CSS */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 15px;
+      text-align: left;
+      color: rgb(180, 222, 42);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .data-table th {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .data-table tr:hover {
+      background-color: #f9fafb;
+    }
+
+    .data-table input[type="number"] {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .data-table input[type="number"]:focus {
+      border-color: #4f46e5;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .data-table {
+        font-size: 0.8em;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 8px 10px;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .main-content {
+        padding: 1rem;
+      }
+
+      .form-grid,
+      .navigation-grid,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Admin Dashboard</h2>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#pending-admins" class="nav-link" data-section="pending-admins">
+          <i class="fas fa-user-shield"></i> Pending Admins
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a href="#styles" class="nav-link active" data-section="styles">
+          <i class="fas fa-palette"></i> Style Editor
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#navigation" class="nav-link" data-section="navigation">
+          <i class="fas fa-bars"></i> Navigation
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#home-content" class="nav-link" data-section="home-content">
+          <i class="fas fa-home"></i> Home Content
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#about-content" class="nav-link" data-section="about-content">
+          <i class="fas fa-info-circle"></i> About Content
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#services-content" class="nav-link" data-section="services-content">
+          <i class="fas fa-concierge-bell"></i> Services Content
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#doctors-content" class="nav-link" data-section="doctors-content">
+          <i class="fas fa-user-md"></i> Doctors Content
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#contact-content" class="nav-link" data-section="contact-content">
+          <i class="fas fa-envelope"></i> Contact Content
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#preview" class="nav-link" data-section="preview">
+          <i class="fas fa-eye"></i> Live Preview
+        </a>
+      </li> -->
+      <li class="nav-item">
+        <a href="#roles" class="nav-link" data-section="roles">
+          <i class="fas fa-user-tag"></i> Add Roles
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#communication" class="nav-link" data-section="communication">
+          <i class="fas fa-comments"></i> Communication
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a href="#email-settings" class="nav-link" data-section="email-settings">
+          <i class="fas fa-envelope"></i> Email Settings
+        </a>
+      </li> -->
+      <!-- Inside the sidebar's nav-menu, add this list item -->
+      <li class="nav-item">
+        <a href="#crops" class="nav-link" data-section="crops">
+          <i class="fas fa-seedling"></i> Crops Management
+        </a>
+      </li>
+
+      <!-- Inside the <ul class="nav-menu"> section -->
+      <li class="nav-item">
+        <a href="#rainfall-data" class="nav-link" data-section="rainfall-data">
+          <i class="fas fa-cloud-rain"></i> Rainfall & WPI Data
+        </a>
+      </li>
+
+      <div onclick="window.location.href='{{ url_for('logout') }}';" style="
+            width: 100%;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            background: #ef4444;
+            padding: 14px 25px;
+            cursor: pointer;
+          ">
+        <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: #fff"></i>
+        <span style="color: #fff; font-weight: 600">Logout</span>
+      </div>
+    </ul>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Styles Section -->
+      <section id="styles-section" class="dashboard-section">
+        <header class="header">
+          <h1>CSS Style Editor</h1>
+          <p>Customize your website's colors and appearance</p>
+        </header>
+
+        <div class="card">
+          <form id="styleForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="primary_color">Primary Color</label>
+                <input type="color" id="primary_color" name="primary_color" class="form-control"
+                  value="{{ styles.primary_color or '#4f46e5' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="background_color">Background Color</label>
+                <input type="color" id="background_color" name="background_color" class="form-control"
+                  value="{{ styles.background_color or '#f3f4f6' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="font_family">Font Family</label>
+                <input type="text" id="font_family" name="font_family" class="form-control"
+                  value="{{ styles.font_family or 'Inter, sans-serif' }}" placeholder="e.g. 'Inter', sans-serif" />
+              </div>
+
+              <div class="form-group">
+                <label for="text_color">Text Color</label>
+                <input type="color" id="text_color" name="text_color" class="form-control"
+                  value="{{ styles.text_color or '#1f2937' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="button_bg">Button Background</label>
+                <input type="color" id="button_bg" name="button_bg" class="form-control"
+                  value="{{ styles.button_bg or '#4f46e5' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="button_text">Button Text</label>
+                <input type="color" id="button_text" name="button_text" class="form-control"
+                  value="{{ styles.button_text or '#ffffff' }}" />
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Styles
+              </button>
+            </div>
+            <div id="style-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Navigation Section -->
+      <section id="navigation-section" class="dashboard-section">
+        <header class="header">
+          <h1>Navigation Editor</h1>
+          <p>Manage your website's navigation menu</p>
+        </header>
+
+        <div class="card">
+          <form id="navbarForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="site_name">Site Name</label>
+                <input type="text" id="site_name" name="site_name" class="form-control" required
+                  value="{{ navbar.site_name or '' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="site_logo">Site Logo URL</label>
+                <input type="text" id="site_logo" name="site_logo" class="form-control"
+                  value="{{ navbar.site_logo or '' }}" />
+              </div>
+            </div>
+
+            <div class="navigation-links-section">
+              <h3 class="section-title">Navigation Links</h3>
+              <div class="navigation-grid">
+                {% for i in range(1, 7) %}
+                <div class="nav-link-group">
+                  <div class="form-group">
+                    <label for="nav_tab_{{ i }}">Tab {{ i }} Name</label>
+                    <input type="text" id="nav_tab_{{ i }}" name="nav_tab_{{ i }}" class="form-control"
+                      value="{{ navbar.get('nav_tab_' ~ i, '') }}" placeholder="e.g. 'Home' or 'About'" />
+                  </div>
+                  <div class="form-group">
+                    <label for="nav_url_{{ i }}">Tab {{ i }} URL</label>
+                    <input type="text" id="nav_url_{{ i }}" name="nav_url_{{ i }}" class="form-control"
+                      value="{{ navbar.get('nav_url_' ~ i, '') }}" placeholder="e.g. '/home' or '/about'" />
+                  </div>
+                  <div class="nav-link-actions">
+                    <button type="button" class="btn btn-outline btn-sm toggle-link" data-index="{{ i }}">
+                      <i class="fas fa-eye-slash"></i> Toggle
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm clear-link" data-index="{{ i }}">
+                      <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Navigation
+              </button>
+            </div>
+            <div id="nav-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Home Content Section -->
+      <section id="home-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>Home Page Content</h1>
+          <p>Edit the content displayed on your home page</p>
+        </header>
+
+        <div class="card">
+          <form id="contentForm">
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="home_title">Home Title</label>
+                <input type="text" id="home_title" name="home_title" class="form-control"
+                  value="{{ content.home_title }}" />
+              </div>
+              <div class="form-group">
+                <label for="home_subtitle">Home Subtitle</label>
+                <input type="text" id="home_subtitle" name="home_subtitle" class="form-control"
+                  value="{{ content.home_subtitle }}" />
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="emergency_care_text">Emergency Care Text</label>
+                <textarea id="emergency_care_text" name="emergency_care_text" class="form-control" rows="3">
+{{ content.emergency_care_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="technology_text">Technology Text</label>
+                <textarea id="technology_text" name="technology_text" class="form-control" rows="3">
+{{ content.technology_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="care_text">Patient Care Text</label>
+                <textarea id="care_text" name="care_text" class="form-control" rows="3">
+{{ content.care_text }}</textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="news_content">News Content (HTML)</label>
+              <textarea id="news_content" name="news_content" class="form-control" rows="5">
+{{ content.news_content }}</textarea>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Home Content
+              </button>
+            </div>
+            <div id="home-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+      <section id="dashboard-section" class="dashboard-section active">
+        <header class="header">
+          <h1 style="font-family:cursive">Admin Dashboard</h1>
+          <p style="font-family: cursive;">Overview of website users and role-based messages</p>
+        </header>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem">
+          <button id="usersBtn" class="btn btn-outline" style="min-width: 120px">
+            Users
+          </button>
+          <button id="messagesBtn" class="btn btn-outline" style="min-width: 120px">
+            Role Messages
+            <span style="
+                  background: #6944ef;
+                  color: #ffffff;
+                  border-radius: 50%;
+                  padding: 2px 8px;
+                  font-size: 0.95em;
+                  margin-left: 6px;
+                ">
+              {{ role_messages_count }}
+            </span>
+          </button>
+          <button id="pendingAdminsBtn" class="btn btn-outline" style="min-width: 160px">
+            Pending Approvals
+            <span style="
+                  background: #7542f5;
+                  color: #ffffff;
+                  border-radius: 50%;
+                  padding: 2px 8px;
+                  font-size: 0.95em;
+                  margin-left: 6px;
+                ">
+              {{ pending_admins|length }}
+            </span>
+          </button>
+        </div>
+
+        <div id="usersInfo" style="display: block">
+          <div class="card">
+            <div class="stats-grid" style="
+                  display: flex;
+                  gap: 2rem;
+                  justify-content: space-between;
+                  margin-bottom: 2rem;
+                ">
+              <div class="stat-card" style="
+                    flex: 1;
+                    background: #f9fafb;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.04);
+                  ">
+                <span style="font-size: 2rem; color: #4f46e5"><i class="fas fa-users"></i></span>
+                <div>
+                  <div style="font-size: 1.1rem; color: #6b7280">
+                    Total Users
+                  </div>
+                  <div class="stat-value" style="font-size: 2rem; font-weight: 700">
+                    {{ user_stats.total_users }}
+                  </div>
+                </div>
+              </div>
+              <div class="stat-card" style="
+                    flex: 1;
+                    background: #f9fafb;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.04);
+                  ">
+                <span style="font-size: 2rem; color: #10b981"><i class="fas fa-user-check"></i></span>
+                <div>
+                  <div style="font-size: 1.1rem; color: #6b7280">
+                    Active Today
+                  </div>
+                  <div class="stat-value" style="font-size: 2rem; font-weight: 700">
+                    {{ user_stats.active_today }}
+                  </div>
+                </div>
+              </div>
+              <div class="stat-card" style="
+                    flex: 1;
+                    background: #f9fafb;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.04);
+                  ">
+                <span style="font-size: 2rem; color: #f59e42"><i class="fas fa-user-plus"></i></span>
+                <div>
+                  <div style="font-size: 1.1rem; color: #6b7280">
+                    New This Week
+                  </div>
+                  <div class="stat-value" style="font-size: 2rem; font-weight: 700">
+                    {{ user_stats.new_this_week }}
+                  </div>
+                </div>
+              </div>
+              <div class="stat-card" style="
+                    flex: 1;
+                    background: #f9fafb;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.04);
+                  ">
+                <span style="font-size: 2rem; color: #ef4444"><i class="fas fa-user-shield"></i></span>
+                <div>
+                  <div style="font-size: 1.1rem; color: #6b7280">
+                    Admin Users
+                  </div>
+                  <div class="stat-value" style="font-size: 2rem; font-weight: 700">
+                    {{ user_stats.admin_users }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h2 style="color: white;">User Management</h2>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto">
+              <table class="user-table" style="
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0 12px;
+                  ">
+                <thead>
+                  <tr style="background: #f3f4f6">
+                    <th style="padding: 12px 16px">ID</th>
+                    <th style="padding: 12px 16px">Name</th>
+                    <th style="padding: 12px 16px">Email</th>
+                    <th style="padding: 12px 16px">Role</th>
+                    <th style="padding: 12px 16px">Joined</th>
+                    <th style="padding: 12px 16px">Status</th>
+                    <!-- <th style="padding: 12px 16px">Actions</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                  <tr style="
+                        background: #fff;
+                        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+                        border-radius: 8px;
+                      ">
+                    <td style="padding: 12px 16px">{{ user._id }}</td>
+                    <td style="padding: 12px 16px">{{ user.name }}</td>
+                    <td style="padding: 12px 16px">{{ user.email }}</td>
+                    <td style="padding: 12px 16px">{{ user.role }}</td>
+                    <td style="padding: 12px 16px">
+                      {{ user.created_at.strftime('%Y-%m-%d') }}
+                    </td>
+                    <td style="padding: 12px 16px">
+                      <span class="status-badge {{ 'active' if user.is_active else 'inactive' }}">
+                        {{ 'Active' if user.is_active else 'Inactive' }}
+                      </span>
+                    </td>
+                    <!-- <td style="padding: 12px 16px">
+                      <button class="btn btn-outline btn-sm edit-user" data-id="{{ user._id }}">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-outline btn-sm delete-user" data-id="{{ user._id }}">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td> -->
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="messagesInfo" style="display: none">
+          <div class="card">
+            <div class="card-header">
+              <h2>
+                Role Messages
+                <span style="
+                      background: #ef4444;
+                      color: #fff;
+                      border-radius: 50%;
+                      padding: 2px 8px;
+                      font-size: 0.95em;
+                      margin-left: 6px;
+                    ">
+                  {{ role_messages_count }}
+                </span>
+              </h2>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto">
+              <table class="user-table" style="
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0 12px;
+                  ">
+                <thead>
+                  <tr style="background: #f3f4f6">
+                    <th style="padding: 12px 16px">To (Email)</th>
+                    <th style="padding: 12px 16px">Role</th>
+                    <th style="padding: 12px 16px">Subject</th>
+                    <th style="padding: 12px 16px">Message</th>
+                    <th style="padding: 12px 16px">Attachment</th>
+                    <th style="padding: 12px 16px">Sent At</th>
+                    <th style="padding: 12px 16px">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for msg in role_messages %}
+                  <tr>
+                    <td style="padding: 12px 16px">{{ msg.user_email }}</td>
+                    <td style="padding: 12px 16px">{{ msg.user_role }}</td>
+                    <td style="padding: 12px 16px">{{ msg.subject }}</td>
+                    <td style="padding: 12px 16px">{{ msg.message }}</td>
+                    <td style="padding: 12px 16px">
+                      {% if msg.attachment %}
+                      <a href="{{ url_for('download_admin_message', filename=msg.attachment) }}"
+                        target="_blank">Download</a>
+                      {% else %} - {% endif %}
+                    </td>
+                    <td style="padding: 12px 16px">
+                      {{ msg.timestamp_str }}
+                    </td>
+                    <td style="padding: 12px 16px">
+                      <span class="status-badge {{ 'active' if not msg.read else 'inactive' }}">
+                        {{ 'Unread' if not msg.read else 'Read' }}
+                      </span>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="pendingAdminsInfo" style="display: none">
+          <div class="card">
+            <div class="card-header">
+              <h2>Pending Admins</h2>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto">
+              <table class="user-table" style="
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0 12px;
+                  ">
+                <thead>
+                  <tr style="background: #f3f4f6">
+                    <th style="padding: 12px 16px">Name</th>
+                    <th style="padding: 12px 16px">Email</th>
+                    <th style="padding: 12px 16px">Requested Role</th>
+                    <th style="padding: 12px 16px">Registered On</th>
+                    <th style="padding: 12px 16px">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in pending_admins %}
+                  <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                      <span class="role-badge pending-{{ user.role.replace('pending_', '') }}">
+                        {{ user.role.replace('pending_', '') }}
+                      </span>
+                    </td>
+                    <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                      <form class="approve-form" data-user-id="{{ user._id }}">
+                        <button type="submit" class="approve-btn">
+                          Approve
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- About Content Section -->
+      <section id="about-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>About Page Content</h1>
+          <p>Edit the content displayed on your about page</p>
+        </header>
+
+        <div class="card">
+          <form id="aboutContentForm">
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="about_title">About Title</label>
+                <input type="text" id="about_title" name="about_title" class="form-control"
+                  value="{{ content.about_title }}" />
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="history_text">History Text</label>
+                <textarea id="history_text" name="history_text" class="form-control" rows="5">
+{{ content.history_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="mission_text">Mission Text</label>
+                <textarea id="mission_text" name="mission_text" class="form-control" rows="5">
+{{ content.mission_text }}</textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="values_text">Values (one per line)</label>
+              <textarea id="values_text" name="values_text" class="form-control" rows="5">
+{{ content.values_text }}</textarea>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save About Content
+              </button>
+            </div>
+            <div id="about-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Services Content Section
+      <section id="services-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>Services Page Content</h1>
+          <p>Edit the content displayed on your services page</p>
+        </header>
+
+        <div class="card">
+          <form id="servicesContentForm">
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="services_title">Services Title</label>
+                <input type="text" id="services_title" name="services_title" class="form-control"
+                  value="{{ content.services_title }}" />
+              </div>
+              <div class="form-group">
+                <label for="services_intro">Services Introduction</label>
+                <textarea id="services_intro" name="services_intro" class="form-control" rows="3">
+{{ content.services_intro }}</textarea>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="cardiology_text">Cardiology Text</label>
+                <textarea id="cardiology_text" name="cardiology_text" class="form-control" rows="3">
+{{ content.cardiology_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="orthopedics_text">Orthopedics Text</label>
+                <textarea id="orthopedics_text" name="orthopedics_text" class="form-control" rows="3">
+{{ content.orthopedics_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="neurology_text">Neurology Text</label>
+                <textarea id="neurology_text" name="neurology_text" class="form-control" rows="3">
+{{ content.neurology_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="pediatrics_text">Pediatrics Text</label>
+                <textarea id="pediatrics_text" name="pediatrics_text" class="form-control" rows="3">
+{{ content.pediatrics_text }}</textarea>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Services Content
+              </button>
+            </div>
+            <div id="services-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Doctors Content Section -->
+      <section id="doctors-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>Doctors Page Content</h1>
+          <p>Edit the content displayed on your doctors page</p>
+        </header>
+
+        <div class="card">
+          <form id="doctorsContentForm">
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="doctors_title">Doctors Title</label>
+                <input type="text" id="doctors_title" name="doctors_title" class="form-control"
+                  value="{{ content.doctors_title }}" />
+              </div>
+              <div class="form-group">
+                <label for="doctors_intro">Doctors Introduction</label>
+                <textarea id="doctors_intro" name="doctors_intro" class="form-control" rows="3">
+{{ content.doctors_intro }}</textarea>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="doctor1_name">Doctor 1 Name</label>
+                <input type="text" id="doctor1_name" name="doctor1_name" class="form-control"
+                  value="{{ content.doctor1_name }}" />
+              </div>
+              <div class="form-group">
+                <label for="doctor1_specialty">Doctor 1 Specialty</label>
+                <input type="text" id="doctor1_specialty" name="doctor1_specialty" class="form-control"
+                  value="{{ content.doctor1_specialty }}" />
+              </div>
+              <div class="form-group">
+                <label for="doctor1_bio">Doctor 1 Bio</label>
+                <textarea id="doctor1_bio" name="doctor1_bio" class="form-control" rows="3">
+{{ content.doctor1_bio }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="doctor2_name">Doctor 2 Name</label>
+                <input type="text" id="doctor2_name" name="doctor2_name" class="form-control"
+                  value="{{ content.doctor2_name }}" />
+              </div>
+              <div class="form-group">
+                <label for="doctor2_specialty">Doctor 2 Specialty</label>
+                <input type="text" id="doctor2_specialty" name="doctor2_specialty" class="form-control"
+                  value="{{ content.doctor2_specialty }}" />
+              </div>
+              <div class="form-group">
+                <label for="doctor2_bio">Doctor 2 Bio</label>
+                <textarea id="doctor2_bio" name="doctor2_bio" class="form-control" rows="3">
+{{ content.doctor2_bio }}</textarea>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Doctors Content
+              </button>
+            </div>
+            <div id="doctors-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section> -->
+
+      <!-- Contact Content Section -->
+      <section id="contact-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>Contact Page Content</h1>
+          <p>Edit the content displayed on your contact page</p>
+        </header>
+
+        <div class="card">
+          <form id="contactContentForm">
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="contact_title">Contact Title</label>
+                <input type="text" id="contact_title" name="contact_title" class="form-control"
+                  value="{{ content.contact_title }}" />
+              </div>
+              <div class="form-group">
+                <label for="contact_intro">Contact Introduction</label>
+                <textarea id="contact_intro" name="contact_intro" class="form-control" rows="3">
+{{ content.contact_intro }}</textarea>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="form-group">
+                <label for="address_text">Address</label>
+                <textarea id="address_text" name="address_text" class="form-control" rows="3">
+{{ content.address_text }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="phone_text">Phone (HTML allowed)</label>
+                <textarea id="phone_text" name="phone_text" class="form-control" rows="3">
+{{ content.phone_text }}</textarea>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Contact Content
+              </button>
+            </div>
+            <div id="contact-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Footer Content Section -->
+      <section id="footer-content-section" class="dashboard-section">
+        <header class="header">
+          <h1>Footer Content</h1>
+          <p>Edit the content displayed in your website footer</p>
+        </header>
+
+        <div class="card">
+          <form id="footerContentForm">
+            <div class="form-group">
+              <label for="footer_text">Footer Text</label>
+              <input type="text" id="footer_text" name="footer_text" class="form-control"
+                value="{{ content.footer_text }}" />
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Footer Content
+              </button>
+            </div>
+            <div id="footer-content-status" class="alert"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Live Preview Section -->
+      <section id="preview-section" class="dashboard-section">
+        <header class="header">
+          <h1>Live Preview</h1>
+          <p>Preview your changes before publishing</p>
+        </header>
+
+        <div class="card">
+          <div class="preview-container">
+            <iframe id="sitePreview" src="{{ url_for('guest_home') }}"></iframe>
+          </div>
+          <div class="card-footer preview-controls">
+            <button id="refreshPreview" class="btn btn-outline btn-sm">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button id="fullscreenPreview" class="btn btn-outline btn-sm">
+              <i class="fas fa-expand"></i> Fullscreen
+            </button>
+            <a href="{{ url_for('admin_preview') }}" target="_blank" class="btn btn-outline btn-sm">
+              <i class="fas fa-external-link-alt"></i> Open Preview
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- Add Roles Section -->
+      <section id="roles-section" class="dashboard-section">
+        <header class="header">
+          <h1>Manage Roles</h1>
+          <p>
+            Create, update, and delete user roles. These roles will be
+            available on the registration page.
+          </p>
+        </header>
+        <div class="card">
+          <form id="roleForm" style="margin-bottom: 2rem">
+            <div class="form-group">
+              <label for="role_name">Role Name</label>
+              <input type="text" id="role_name" name="role_name" class="form-control" placeholder="Enter new role"
+                required />
+            </div>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">Add Role</button>
+            </div>
+            <div id="role-status" class="alert"></div>
+          </form>
+          <div>
+            <h3>Existing Roles</h3>
+            <ul id="roles-list" style="list-style: none; padding: 0">
+              {% for role in roles %}
+              <li style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px 0;
+                    border-bottom: 1px solid #eee;
+                  " data-role-id="{{ role._id }}">
+                <span class="role-name">{{ role.name }}</span>
+                <input type="text" class="edit-role-input" value="{{ role.name }}"
+                  style="display: none; margin-right: 8px" />
+                <span>
+                  <button class="btn btn-outline btn-sm edit-role" data-id="{{ role._id }}">
+                    Edit
+                  </button>
+                  <button class="btn btn-outline btn-sm save-role" data-id="{{ role._id }}" style="display: none">
+                    Save
+                  </button>
+                  <button class="btn btn-outline btn-sm cancel-edit-role" data-id="{{ role._id }}"
+                    style="display: none">
+                    Cancel
+                  </button>
+                  <button class="btn btn-outline btn-sm delete-role" data-id="{{ role._id }}">
+                    Delete
+                  </button>
+                </span>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section id="communication-section" class="dashboard-section">
+        <header class="header">
+          <h1>Communication</h1>
+          <p>Send a message to all users of a specific role.</p>
+        </header>
+        <div class="card">
+          <!-- ...existing code... -->
+          <form method="POST" action="{{ url_for('admin_communication') }}" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="role_select">Select Role</label>
+              <select id="role_select" name="role" class="form-control" required>
+                <option value="" disabled selected>Select a role</option>
+                {% for role in roles %}
+                <option value="{{ role.name }}">
+                  {{ role.name|capitalize }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group" style="margin-top: 1rem">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter subject"
+                required />
+            </div>
+            <div class="form-group" style="margin-top: 1rem">
+              <label for="message_content">Message</label>
+              <textarea id="message_content" name="message" class="form-control" rows="6"
+                placeholder="Type your message here..." required></textarea>
+            </div>
+            <div class="form-group" style="margin-top: 1rem">
+              <label for="attachment">Attachment (optional)</label>
+              <input type="file" id="attachment" name="attachment" class="form-control"
+                accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" />
+            </div>
+            <div class="text-center" style="margin-top: 1.5rem">
+              <button type="submit" class="btn btn-primary">
+                Send Message
+              </button>
+            </div>
+          </form>
+          <!-- ...existing code... -->
+          {% with messages = get_flashed_messages(with_categories=true) %} {%
+          if messages %}
+          <div style="margin-top: 1rem">
+            {% for category, message in messages %}
+            <div style="
+                  background: #4f46e5;
+                  color: #fff;
+                  padding: 10px 18px;
+                  border-radius: 8px;
+                  text-align: center;
+                  margin-bottom: 10px;
+                ">
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %} {% endwith %}
+        </div>
+      </section>
+
+      <!-- Pending Admins Section -->
+      <section id="pending-admins-section" class="dashboard-section">
+        <header class="header">
+          <h1>Pending Admins for Approval</h1>
+          <p>Approve or reject users waiting for admin approval.</p>
+        </header>
+        <div class="card">
+          {% if pending_admins and pending_admins|length > 0 %}
+          <div class="table-responsive" style="overflow-x: auto">
+            <table class="user-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Requested Role</th>
+                  <th>Registered On</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in pending_admins %}
+                <tr>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="role-badge pending-{{ user.role.replace('pending_', '') }}">
+                      {{ user.role.replace('pending_', '') }}
+                    </span>
+                  </td>
+                  <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                  <td>
+                    <form class="approve-form" data-user-id="{{ user._id }}">
+                      <button type="submit" class="approve-btn">
+                        Approve
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="no-pending" style="text-align: center; padding: 40px; color: #6b7280">
+            <p>No pending admins for approval at this time.</p>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+      <!-- Email Settings Section -->
+      <!-- Email Settings Section -->
+      <section id="email-settings-section" class="dashboard-section">
+        <header class="header">
+          <h1>Email Settings</h1>
+          <p>Configure the email account used for sending messages</p>
+        </header>
+
+        <div class="card">
+          <!-- In the email-settings-section -->
+          <form id="emailSettingsForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="admin_email">Admin Email Address</label>
+                <input type="email" id="admin_email" name="admin_email" class="form-control" required
+                  value="{{ email_settings.admin_email if email_settings else '' }}" />
+              </div>
+
+              <div class="form-group">
+                <label for="smtp_password">SMTP Password/App Password</label>
+                <input type="password" id="smtp_password" name="smtp_password" class="form-control" required
+                  placeholder="Enter your email app password" value="" />
+                <small class="form-text text-muted">
+                  Leave blank to keep current password
+                </small>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">
+                Save Email Settings
+              </button>
+            </div>
+            <div id="email-settings-status" class="alert"></div>
+          </form>
+        </div>
+
+
+
+      </section>
+      <!-- Crops Management Section -->
+      <section id="crops-section" class="dashboard-section">
+        <header class="header">
+          <h1>Crops Management</h1>
+          <p>Manage master data of crops</p>
+        </header>
+
+        <div class="card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Crops List</h2>
+            <button id="addCropBtn" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Add Crop
+            </button>
+          </div>
+
+          <div class="table-responsive" style="overflow-x: auto; margin-top: 20px;">
+            <table class="crops-table" style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f3f4f6;">
+                  <th style="padding: 12px 16px; text-align: left;">Name</th>
+                  <th style="padding: 12px 16px; text-align: left;">Season</th>
+                  <th style="padding: 12px 16px; text-align: left;">Area</th>
+                  <th style="padding: 12px 16px; text-align: left;">Image</th>
+                  <th style="padding: 12px 16px; text-align: left;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cropsTableBody" style="background-color: white;">
+                <!-- Crops will be loaded here via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rainfall & WPI Data Section -->
+      <!-- Update the existing Rainfall & WPI Data section -->
+      <section id="rainfall-data-section" class="dashboard-section">
+        <header class="header">
+          <h1>Rainfall & WPI Data Management</h1>
+          <p>Manage monthly rainfall and WPI data for agricultural analysis</p>
+        </header>
+
+        <div class="card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Rainfall Data Records</h2>
+            <button id="addRainfallDataBtn" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Add New Data
+            </button>
+          </div>
+
+          <div class="table-responsive" style="margin-top: 20px; overflow-x: auto;">
+            <table class="data-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Crop</th>
+                  <th>Year</th>
+                  <th>Base Value</th>
+                  <!-- <th>Last Updated</th> -->
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rainfallDataTableBody">
+                <!-- Data will be loaded here via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Rainfall Data Form Modal -->
+        <div id="rainfallDataModal" class="modal"
+          style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+          <div class="modal-content"
+            style="background-color: #fff; margin: 5% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 900px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 80vh; overflow-y: auto;">
+            <span class="close-modal"
+              style="float: right; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2 id="rainfallModalTitle">Add Rainfall Data</h2>
+
+            <form id="rainfallDataForm">
+              <input type="hidden" id="rainfallDataId">
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="modalCropSelect">Crop *</label>
+                  <select id="modalCropSelect" class="form-control" required>
+                    <option value="">-- Select Crop --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="modalYearSelect">Year *</label>
+                  <select id="modalYearSelect" class="form-control" required>
+                    <option value="">-- Select Year --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="modalBaseValue">Base Value *</label>
+                  <input type="number" step="0.01" id="modalBaseValue" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="table-responsive" style="margin-top: 20px;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Rainfall (mm)</th>
+                      <th>WPI Index</th>
+                    </tr>
+                  </thead>
+                  <tbody id="modalMonthlyData">
+                    <!-- Monthly data rows will be generated here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="form-actions" style="margin-top: 20px; text-align: right;">
+                <button type="button" class="btn btn-outline close-modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">
+                  <span id="submitBtnText">Save Data</span>
+                  <span class="spinner" style="display: none;"></span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Add/Edit Crop Modal -->
+      <div id="cropModal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content"
+          style="background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 8px; width: 50%; max-width: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <span class="close-modal"
+            style="float: right; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</span>
+
+          <h2 id="modalTitle" style="margin-bottom: 20px;">Add New Crop</h2>
+
+          <form id="cropForm">
+            <input type="hidden" id="cropId">
+
+            <div class="form-group">
+              <label for="cropName">Crop Name</label>
+              <input type="text" id="cropName" name="name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cropSeason">Season</label>
+
+              <input type="text" id="cropSeason" name="season" class="form-control">
+
+            </div>
+
+            <div class="form-group">
+              <label for="cropArea">Area</label>
+              <input type="text" id="cropArea" name="area" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="cropImage">Image URL</label>
+              <input type="text" id="cropImage" name="image" class="form-control">
+              <small class="form-text text-muted">Enter a URL or path to the crop image</small>
+            </div>
+
+            <div class="form-actions" style="margin-top: 20px; text-align: right;">
+              <button type="button" class="btn btn-outline close-modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Delete Confirmation Modal -->
+      <div id="deleteModal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content"
+          style="background-color: #fff; margin: 20% auto; padding: 20px; border-radius: 8px; width: 40%; max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <h2>Confirm Deletion</h2>
+          <p>Are you sure you want to delete this crop? This action cannot be undone.</p>
+          <input type="hidden" id="deleteCropId">
+
+          <div class="form-actions" style="margin-top: 20px; text-align: right;">
+            <button type="button" class="btn btn-outline cancel-delete">Cancel</button>
+            <button type="button" class="btn btn-danger confirm-delete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Add this at the end of your f:\Flask\app\templates\admin\css_editor.html, just before </body> -->
+  <div style="
+        margin-top: 40px;
+        text-align: center;
+        position: absolute;
+        right: 20px;
+      ">
+    <a href="{{ url_for('admin_messages') }}" class="messages-link" style="
+          display: inline-block;
+          padding: 14px 32px;
+          background:  #38a43e;;
+          color: #fff;
+          border-radius: 8px;
+          font-weight: 600;
+          text-decoration: none;
+          font-size: 1.1rem;
+          transition: background 0.2s;
+          position: relative;
+        ">
+      <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+      User Messages {% if unread_count and unread_count > 0 %}
+      <span class="message-count-badge" style="
+            background: #ef4444;
+            color: #fff;
+            border-radius: 50%;
+            padding: 4px 10px;
+            font-size: 0.95em;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+          ">
+        {{ unread_count }}
+      </span>
+      {% endif %}
+    </a>
+  </div>
+
+  <script>
+
+
+    // Rainfall Data Management
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize when rainfall section is loaded
+      document.querySelector('.nav-link[data-section="rainfall-data"]').addEventListener('click', function () {
+        loadRainfallDataTable();
+        loadCropsDropdown();
+        loadYearsDropdown();
+      });
+
+      // Add new data button
+      document.getElementById('addRainfallDataBtn').addEventListener('click', function () {
+        openRainfallDataModal();
+      });
+
+      // Modal close handlers
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document.getElementById('rainfallDataModal').style.display = 'none';
+        });
+      });
+
+      // Form submission
+      document.getElementById('rainfallDataForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        saveRainfallData();
+      });
+    });
+
+    function loadRainfallDataTable() {
+      fetch('/api/rainfall-data/all')
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('rainfallDataTableBody');
+          tableBody.innerHTML = '';
+
+          if (data.success && data.data && data.data.length > 0) {
+            data.data.forEach(item => {
+              const row = document.createElement('tr');
+
+              // Get crop name (we'll need to fetch this separately or modify the API to include it)
+              const cropName = item.crop_id; // This should be the crop name, you might need to adjust
+
+              row.innerHTML = `
+                        <td>${item.crop_name}</td>
+                        <td>${item.year}</td>
+                        <td>${item.base_value}</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm edit-rainfall" data-id="${item._id}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-outline btn-sm delete-rainfall" data-id="${item._id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    `;
+
+              tableBody.appendChild(row);
+
+              // Add event listeners to the new buttons
+              row.querySelector('.edit-rainfall').addEventListener('click', function () {
+                editRainfallData(item._id);
+              });
+
+              row.querySelector('.delete-rainfall').addEventListener('click', function () {
+                if (confirm('Are you sure you want to delete this rainfall data?')) {
+                  deleteRainfallData(item._id);
+                }
+              });
+            });
+          } else {
+            tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center;">No rainfall data found</td>
+                    </tr>
+                `;
+          }
+        })
+        .catch(error => {
+          console.error('Error loading rainfall data:', error);
+          showAlert('Failed to load rainfall data', 'error');
+        });
+    }
+
+    function openRainfallDataModal() {
+      document.getElementById('rainfallModalTitle').textContent = 'Add New Rainfall Data';
+      document.getElementById('rainfallDataId').value = '';
+      document.getElementById('rainfallDataForm').reset();
+
+      // Clear and populate crops dropdown
+      const cropSelect = document.getElementById('modalCropSelect');
+      cropSelect.innerHTML = '<option value="">-- Loading crops... --</option>';
+      loadCropsForModal();
+
+      // Clear and populate years dropdown
+      const yearSelect = document.getElementById('modalYearSelect');
+      yearSelect.innerHTML = '<option value="">-- Select Year --</option>';
+      loadYearsForModal();
+
+      // Setup monthly data table
+      setupMonthlyDataTable();
+
+      document.getElementById('rainfallDataModal').style.display = 'block';
+    }
+
+    function loadCropsForModal() {
+      fetch('/admin/getcrops')
+        .then(response => response.json())
+        .then(data => {
+          const cropSelect = document.getElementById('modalCropSelect');
+          cropSelect.innerHTML = '<option value="">-- Select Crop --</option>';
+
+          if (data.success && data.crops && data.crops.length > 0) {
+            data.crops.forEach(crop => {
+              const option = document.createElement('option');
+              option.value = crop._id;
+              option.textContent = crop.name;
+              cropSelect.appendChild(option);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading crops:', error);
+          document.getElementById('modalCropSelect').innerHTML = '<option value="">-- Error loading crops --</option>';
+        });
+    }
+
+    function loadYearsForModal() {
+      const yearSelect = document.getElementById('modalYearSelect');
+      const currentYear = new Date().getFullYear();
+
+      for (let year = currentYear; year >= currentYear - 10; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+      }
+    }
+
+    function setupMonthlyDataTable() {
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      const tbody = document.getElementById('modalMonthlyData');
+      tbody.innerHTML = '';
+
+      months.forEach(month => {
+        const monthId = month.toLowerCase().substring(0, 3);
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${month}</td>
+            <td><input type="number" step="0.01" id="modal_${monthId}_rainfall" class="form-control" placeholder="0.00" required></td>
+            <td><input type="number" step="0.01" id="modal_${monthId}_wpi" class="form-control" placeholder="0.00" required></td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function editRainfallData(id) {
+  fetch(`/api/rainfall-data/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Rainfall Data API Response:", data); // Debug
+      
+      if (data.success && data.data) {
+        const item = data.data;
+        console.log("Editing Item:", item); // Debug
+
+        // Set modal title and ID
+        document.getElementById('rainfallModalTitle').textContent = 'Edit Rainfall Data';
+        document.getElementById('rainfallDataId').value = item._id;
+
+        // 1. Load Crop Dropdown
+        const cropSelect = document.getElementById('modalCropSelect');
+        cropSelect.innerHTML = '<option value="">-- Loading crops... --</option>';
+
+        fetch('/admin/getcrops')
+          .then(response => response.json())
+          .then(cropsData => {
+            console.log("Crops Data:", cropsData); // Debug
+            cropSelect.innerHTML = '<option value="">-- Select Crop --</option>';
+
+            if (cropsData.success && cropsData.crops) {
+              cropsData.crops.forEach(crop => {
+                const option = document.createElement('option');
+                option.value = crop._id;
+                option.textContent = crop.name;
+                if (crop._id === item.crop_id) option.selected = true;
+                cropSelect.appendChild(option);
+              });
+            }
+          })
+          .catch(error => console.error("Error loading crops:", error));
+
+        // 2. Set Year
+        const yearSelect = document.getElementById('modalYearSelect');
+        if (yearSelect) yearSelect.value = item.year || '';
+
+        // 3. Set Base Value
+        const baseValueInput = document.getElementById('modalBaseValue');
+        if (baseValueInput) baseValueInput.value = item.base_value || '';
+
+        // 4. Set Monthly Rainfall & WPI
+        const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+        
+        months.forEach(month => {
+          const rainfallInput = document.getElementById(`modal_${month}_rainfall`);
+          const wpiInput = document.getElementById(`modal_${month}_wpi`);
+
+          if (rainfallInput) {
+            rainfallInput.value = (item.rainfall && item.rainfall[month]) ? item.rainfall[month] : '';
+          }
+          if (wpiInput) {
+            wpiInput.value = (item.wpi && item.wpi[month]) ? item.wpi[month] : '';
+          }
+        });
+
+        // Show Modal
+        document.getElementById('rainfallDataModal').style.display = 'block';
+      } else {
+        throw new Error(data.message || 'Failed to load rainfall data');
+      }
+    })
+    .catch(error => {
+      console.error('Error loading rainfall data:', error);
+      showAlert('Failed to load rainfall data for editing', 'error');
+    });
+}
+    function saveRainfallData() {
+      const submitBtn = document.querySelector('#rainfallDataForm button[type="submit"]');
+      const spinner = submitBtn.querySelector('.spinner');
+      const submitText = submitBtn.querySelector('#submitBtnText');
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitText.textContent = 'Saving...';
+      spinner.style.display = 'inline-block';
+
+      // Prepare data
+      const data = {
+        _id: document.getElementById('rainfallDataId').value || undefined,
+        crop_id: document.getElementById('modalCropSelect').value,
+        year: document.getElementById('modalYearSelect').value,
+        base_value: parseFloat(document.getElementById('modalBaseValue').value),
+        rainfall: {},
+        wpi: {}
+      };
+
+      // Validate required fields
+      if (!data.crop_id || !data.year || isNaN(data.base_value)) {
+        showAlert('Please fill all required fields', 'error');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Save Data';
+        spinner.style.display = 'none';
+        return;
+      }
+
+      // Collect monthly data
+      const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+        'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+      months.forEach(month => {
+        const rainfallInput = document.getElementById(`modal_${month}_rainfall`);
+        const wpiInput = document.getElementById(`modal_${month}_wpi`);
+
+        data.rainfall[month] = rainfallInput.value ? parseFloat(rainfallInput.value) : 0;
+        data.wpi[month] = wpiInput.value ? parseFloat(wpiInput.value) : 0;
+      });
+
+      // Determine method and URL based on whether we're creating or updating
+      const method = data._id ? 'PUT' : 'POST';
+      const url = data._id ? `/api/rainfall-data/${data._id}` : '/api/rainfall-data';
+
+      // Send to server
+      fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            showAlert('Data saved successfully!', 'success');
+            loadRainfallDataTable();
+            document.getElementById('rainfallDataModal').style.display = 'none';
+          } else {
+            throw new Error(result.message || 'Failed to save data');
+          }
+        })
+        .catch(error => {
+          showAlert('Error: ' + error.message, 'error');
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitText.textContent = 'Save Data';
+          spinner.style.display = 'none';
+        });
+    }
+
+    function deleteRainfallData(id) {
+      if (!confirm('Are you sure you want to delete this rainfall data? This action cannot be undone.')) {
+        return;
+      }
+
+      fetch(`/api/rainfall-data/${id}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            showAlert('Rainfall data deleted successfully', 'success');
+            loadRainfallDataTable();
+          } else {
+            throw new Error(result.message || 'Failed to delete data');
+          }
+        })
+        .catch(error => {
+          showAlert('Error: ' + error.message, 'error');
+        });
+    }
+
+    function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+
+      const header = document.querySelector('#rainfall-data-section .header');
+      header.insertAdjacentElement('afterend', alertDiv);
+
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 5000);
+    }
+    // Crops Management
+    document.addEventListener('DOMContentLoaded', function () {
+      // Load crops when crops section is shown
+      document.querySelector('.nav-link[data-section="crops"]').addEventListener('click', loadCrops);
+
+      // Add Crop button
+      document.getElementById('addCropBtn').addEventListener('click', function () {
+        document.getElementById('modalTitle').textContent = 'Add New Crop';
+        document.getElementById('cropForm').reset();
+        document.getElementById('cropId').value = '';
+        document.getElementById('cropModal').style.display = 'block';
+      });
+
+      // Close modal buttons
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document.getElementById('cropModal').style.display = 'none';
+        });
+      });
+
+      // Form submission
+      document.getElementById('cropForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const cropId = document.getElementById('cropId').value;
+        const formData = {
+          name: document.getElementById('cropName').value,
+          season: document.getElementById('cropSeason').value,
+          area: document.getElementById('cropArea').value,
+          image: document.getElementById('cropImage').value
+        };
+
+        const url = cropId ? `/admin/crops/${cropId}` : '/admin/crops/add';
+        const method = cropId ? 'PUT' : 'POST';
+
+        fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              loadCrops();
+              document.getElementById('cropModal').style.display = 'none';
+              showAlert('Crop saved successfully!', 'success', 'crops-section');
+            } else {
+              throw new Error(data.message || 'Failed to save crop');
+            }
+          })
+          .catch(error => {
+            showAlert(error.message, 'error', 'crops-section');
+          });
+      });
+
+      // Delete modal handlers
+      document.querySelectorAll('.delete-crop').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const cropId = this.dataset.id;
+          document.getElementById('deleteCropId').value = cropId;
+          document.getElementById('deleteModal').style.display = 'block';
+        });
+      });
+
+      document.querySelector('.cancel-delete').addEventListener('click', function () {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      document.querySelector('.confirm-delete').addEventListener('click', function () {
+        const cropId = document.getElementById('deleteCropId').value;
+
+        fetch(`/admin/crops/${cropId}`, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              loadCrops();
+              document.getElementById('deleteModal').style.display = 'none';
+              showAlert('Crop deleted successfully!', 'success', 'crops-section');
+            } else {
+              throw new Error(data.message || 'Failed to delete crop');
+            }
+          })
+          .catch(error => {
+            showAlert(error.message, 'error', 'crops-section');
+          });
+      });
+    });
+
+    function loadCrops() {
+      fetch('/admin/crops')
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('cropsTableBody');
+          tableBody.innerHTML = '';
+
+          data.forEach(crop => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-crop-id', crop._id);
+            row.style.borderBottom = '1px solid #e5e7eb';
+
+            row.innerHTML = `
+          <td style="padding: 12px 16px;">${crop.name}</td>
+          <td style="padding: 12px 16px;">${crop.season}</td>
+          <td style="padding: 12px 16px;">${crop.area || '-'}</td>
+          <td style="padding: 12px 16px;">
+            ${crop.image ? `<img src="${crop.image}" alt="${crop.name}" style="max-width: 100px; max-height: 60px;">` : 'No image'}
+          </td>
+          <td style="padding: 12px 16px;">
+            <button class="btn btn-outline btn-sm edit-crop" data-id="${crop._id}">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-outline btn-sm delete-crop" data-id="${crop._id}">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </td>
+        `;
+
+            tableBody.appendChild(row);
+
+            // Add event listeners to the new buttons
+            row.querySelector('.edit-crop').addEventListener('click', function () {
+              editCrop(crop);
+            });
+
+            row.querySelector('.delete-crop').addEventListener('click', function () {
+              document.getElementById('deleteCropId').value = crop._id;
+              document.getElementById('deleteModal').style.display = 'block';
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error loading crops:', error);
+          showAlert('Failed to load crops', 'error', 'crops-section');
+        });
+    }
+
+    function editCrop(crop) {
+      document.getElementById('modalTitle').textContent = 'Edit Crop';
+      document.getElementById('cropId').value = crop._id;
+      document.getElementById('cropName').value = crop.name;
+      document.getElementById('cropSeason').value = crop.season;
+      document.getElementById('cropArea').value = crop.area || '';
+      document.getElementById('cropImage').value = crop.image || '';
+      document.getElementById('cropModal').style.display = 'block';
+    }
+
+    function showAlert(message, type, containerId) {
+      const container = document.getElementById(containerId);
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      alertDiv.style.marginTop = '20px';
+
+      container.insertBefore(alertDiv, container.firstChild);
+
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 5000);
+    }
+  </script>
+  <script>
+    // Add this to your existing JavaScript
+    function loadCropsDropdown() {
+      fetch('/admin/crops')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          const cropSelect = document.getElementById('cropSelect');
+          // Clear existing options except the first
+          while (cropSelect.options.length > 1) {
+            cropSelect.remove(1);
+          }
+
+          // Add new options from fetched crops
+          if (data.success && data.crops) {
+            data.crops.forEach(crop => {
+              const option = document.createElement('option');
+              option.value = crop._id;
+              option.textContent = crop.name;
+              cropSelect.appendChild(option);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading crops:', error);
+          showAlert('Failed to load crops. Please try again.', 'error');
+        });
+    }
+
+    // Call this when the section is loaded
+    document.querySelector('.nav-link[data-section="rainfall-data"]').addEventListener('click', function () {
+      loadCropsDropdown();
+
+      // Also load years (as previously implemented)
+      loadYearsDropdown();
+    });
+
+    // Add this to your existing JavaScript
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize when rainfall section is loaded
+      document.querySelector('.nav-link[data-section="rainfall-data"]').addEventListener('click', initRainfallSection);
+
+      function initRainfallSection() {
+        loadCropsDropdown();
+        loadYearsDropdown();
+        setupMonthlyDataTable();
+        setupFormHandlers();
+      }
+
+      function loadCropsDropdown() {
+        const cropSelect = document.getElementById('cropSelect');
+        // Set temporary loading message
+        cropSelect.innerHTML = '<option value="">-- Loading crops... --</option>';
+
+        fetch('/admin/getcrops')
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            cropSelect.innerHTML = '<option value="">-- Select Crop --</option>';
+
+            if (data.success && data.crops && data.crops.length > 0) {
+              data.crops.forEach(crop => {
+                const option = document.createElement('option');
+                option.value = crop._id;
+                option.textContent = crop.name;
+                cropSelect.appendChild(option);
+              });
+            } else {
+              cropSelect.innerHTML = '<option value="">-- No crops available --</option>';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading crops:', error);
+            cropSelect.innerHTML = '<option value="">-- Error loading crops --</option>';
+            showAlert('Failed to load crops. Please try again.', 'error');
+          });
+      }
+
+      function loadYearsDropdown() {
+        const yearSelect = document.getElementById('yearSelect');
+        const currentYear = new Date().getFullYear();
+
+        yearSelect.innerHTML = '<option value="">-- Select Year --</option>';
+
+        for (let year = currentYear; year >= currentYear - 10; year--) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+        }
+      }
+
+      function setupMonthlyDataTable() {
+        const months = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const tbody = document.querySelector('.data-table tbody');
+        tbody.innerHTML = '';
+
+        months.forEach(month => {
+          const monthId = month.toLowerCase().substring(0, 3);
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+        <td>${month}</td>
+        <td><input type="number" value="0" step="0.01" id="${monthId}_rainfall" class="form-control" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" id="${monthId}_wpi" class="form-control" placeholder="0.00"></td>
+      `;
+
+          tbody.appendChild(row);
+        });
+      }
+
+      function setupFormHandlers() {
+        // Load data when crop/year changes
+        document.getElementById('cropSelect').addEventListener('change', loadRainfallData);
+        document.getElementById('yearSelect').addEventListener('change', loadRainfallData);
+
+        // Handle form submission
+        document.getElementById('rainfallForm').addEventListener('submit', handleRainfallSubmit);
+
+        // Clear form
+        document.getElementById('clearForm').addEventListener('click', function () {
+          document.getElementById('rainfallForm').reset();
+        });
+      }
+
+      function loadRainfallData() {
+        const cropId = document.getElementById('cropSelect').value;
+        const year = document.getElementById('yearSelect').value;
+
+        if (cropId && year) {
+          fetch(`/api/rainfall-data?crop_id=${cropId}&year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data && data.success) {
+                // Set base value
+                document.getElementById('baseValue').value = data.base_value || '';
+
+                // Set monthly values
+                if (data.rainfall) {
+                  Object.entries(data.rainfall).forEach(([month, value]) => {
+                    const input = document.getElementById(`${month}_rainfall`);
+                    if (input) input.value = value || '';
+                  });
+                }
+
+                if (data.wpi) {
+                  Object.entries(data.wpi).forEach(([month, value]) => {
+                    const input = document.getElementById(`${month}_wpi`);
+                    if (input) input.value = value || '';
+                  });
+                }
+              }
+            })
+            .catch(error => console.error('Error loading data:', error));
+        }
+      }
+
+      function handleRainfallSubmit(e) {
+        e.preventDefault();
+
+        const submitBtn = document.querySelector('#rainfallForm button[type="submit"]');
+        const spinner = submitBtn.querySelector('.spinner');
+        const submitText = submitBtn.querySelector('#submitBtnText');
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.textContent = 'Saving...';
+        spinner.style.display = 'inline-block';
+
+        // Prepare data
+        const data = {
+          crop_id: document.getElementById('cropSelect').value,
+          year: document.getElementById('yearSelect').value,
+          base_value: parseFloat(document.getElementById('baseValue').value),
+          rainfall: {},
+          wpi: {}
+        };
+
+        // Collect monthly data
+        const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+          'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+        months.forEach(month => {
+          data.rainfall[month] = parseFloat(document.getElementById(`${month}_rainfall`).value) || 0;
+          data.wpi[month] = parseFloat(document.getElementById(`${month}_wpi`).value) || 0;
+        });
+
+        // Send to server
+        fetch('/api/rainfall-data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(result => {
+            if (result.success) {
+              showAlert('Data saved successfully!', 'success');
+            } else {
+              throw new Error(result.message || 'Failed to save data');
+            }
+          })
+          .catch(error => {
+            showAlert('Error: ' + error.message, 'error');
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitText.textContent = 'Save Data';
+            spinner.style.display = 'none';
+          });
+      }
+
+      function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.textContent = message;
+
+        const header = document.querySelector('#rainfall-data-section .header');
+        header.insertAdjacentElement('afterend', alertDiv);
+
+        setTimeout(() => {
+          alertDiv.remove();
+        }, 5000);
+      }
+    });
+    // User management
+    document.querySelectorAll(".edit-user").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const userId = this.dataset.id;
+        // Implement edit functionality
+        alert(`Edit user ${userId}`);
+      });
+    });
+
+    document.querySelectorAll(".delete-user").forEach((btn) => {
+      btn.addEventListener("click", async function () {
+        const userId = this.dataset.id;
+        if (confirm("Are you sure you want to delete this user?")) {
+          try {
+            const response = await fetch(`/admin/users/${userId}`, {
+              method: "DELETE",
+            });
+            const result = await response.json();
+            if (result.success) {
+              window.location.reload();
+            } else {
+              alert(result.message);
+            }
+          } catch (err) {
+            alert("Failed to delete user");
+          }
+        }
+      });
+    });
+    // Section Navigation
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      if (link.hasAttribute("data-section")) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Update active state
+          document.querySelectorAll(".nav-link").forEach((navLink) => {
+            navLink.classList.remove("active");
+          });
+          this.classList.add("active");
+
+          // Show the selected section
+          const sectionId = this.dataset.section;
+          document
+            .querySelectorAll(".dashboard-section")
+            .forEach((section) => {
+              section.classList.remove("active");
+            });
+          document
+            .getElementById(`${sectionId}-section`)
+            .classList.add("active");
+
+          // Scroll to top
+          window.scrollTo(0, 0);
+        });
+      }
+    });
+
+    // Enhanced form submission handler with proper JSON handling
+    async function handleFormSubmit(formId, endpoint, statusId) {
+      const form = document.getElementById(formId);
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const statusEl = document.getElementById(statusId);
+      const originalBtnText = submitBtn.textContent;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+
+      try {
+        // Prepare form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Special handling for navigation tabs
+        if (formId === "navbarForm") {
+          for (let i = 1; i <= 6; i++) {
+            data[`nav_tab_${i}`] = document.getElementById(
+              `nav_tab_${i}`
+            ).value;
+            data[`nav_url_${i}`] = document.getElementById(
+              `nav_url_${i}`
+            ).value;
+          }
+        }
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        // Check if response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await response.text();
+          throw new Error(text || "Invalid server response");
+        }
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Request failed");
+        }
+
+        showAlert(
+          result.message || "Changes saved successfully!",
+          "success",
+          statusEl
+        );
+        refreshPreviewWithTimestamp();
+      } catch (error) {
+        console.error("Error:", error);
+        showAlert(
+          error.message || "Failed to save changes",
+          "error",
+          statusEl
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+    }
+
+    // Form Submissions
+    document.getElementById("styleForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleFormSubmit("styleForm", "/admin/save-styles", "style-status");
+    });
+
+    document.getElementById("navbarForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleFormSubmit("navbarForm", "/admin/save-navbar", "nav-status");
+    });
+
+    document.getElementById("contentForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleFormSubmit(
+        "contentForm",
+        "/admin/save-content",
+        "home-content-status"
+      );
+    });
+
+    document
+      .getElementById("aboutContentForm")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormSubmit(
+          "aboutContentForm",
+          "/admin/save-content",
+          "about-content-status"
+        );
+      });
+
+    document
+      .getElementById("servicesContentForm")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormSubmit(
+          "servicesContentForm",
+          "/admin/save-content",
+          "services-content-status"
+        );
+      });
+
+    document
+      .getElementById("doctorsContentForm")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormSubmit(
+          "doctorsContentForm",
+          "/admin/save-content",
+          "doctors-content-status"
+        );
+      });
+
+    document
+      .getElementById("contactContentForm")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormSubmit(
+          "contactContentForm",
+          "/admin/save-content",
+          "contact-content-status"
+        );
+      });
+
+    document
+      .getElementById("footerContentForm")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormSubmit(
+          "footerContentForm",
+          "/admin/save-content",
+          "footer-content-status"
+        );
+      });
+
+    // Navigation Link Interactions
+    document.querySelectorAll(".toggle-link").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const index = this.dataset.index;
+        const nameInput = document.getElementById(`nav_tab_${index}`);
+        const urlInput = document.getElementById(`nav_url_${index}`);
+        const icon = this.querySelector("i");
+
+        if (nameInput.disabled) {
+          // Enable the inputs
+          nameInput.disabled = false;
+          urlInput.disabled = false;
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+          this.innerHTML = '<i class="fas fa-eye-slash"></i> Toggle';
+        } else {
+          // Disable the inputs
+          nameInput.disabled = true;
+          urlInput.disabled = true;
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+          this.innerHTML = '<i class="fas fa-eye"></i> Toggle';
+        }
+      });
+    });
+
+    document.querySelectorAll(".clear-link").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const index = this.dataset.index;
+        document.getElementById(`nav_tab_${index}`).value = "";
+        document.getElementById(`nav_url_${index}`).value = "";
+      });
+    });
+
+    // Preview Functionality
+    function refreshPreviewWithTimestamp() {
+      const preview = document.getElementById("sitePreview");
+      preview.src = preview.src.split("?")[0] + "?t=" + new Date().getTime();
+    }
+
+    document
+      .getElementById("refreshPreview")
+      .addEventListener("click", function () {
+        refreshPreviewWithTimestamp();
+        showNotification("Preview refreshed");
+      });
+
+    document
+      .getElementById("fullscreenPreview")
+      .addEventListener("click", function () {
+        const preview = document.getElementById("sitePreview");
+        if (preview.requestFullscreen) {
+          preview.requestFullscreen();
+        } else if (preview.webkitRequestFullscreen) {
+          preview.webkitRequestFullscreen();
+        } else if (preview.msRequestFullscreen) {
+          preview.msRequestFullscreen();
+        }
+      });
+
+    // Helper Functions
+    function showAlert(message, type, container) {
+      container.textContent = message;
+      container.className = `alert alert-${type}`;
+      container.style.display = "block";
+
+      setTimeout(() => {
+        container.style.display = "none";
+      }, 5000);
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement("div");
+      notification.className = "preview-notification";
+      notification.textContent = message;
+
+      const previewContainer = document.querySelector(".preview-container");
+      previewContainer.appendChild(notification);
+
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // Initialize the preview iframe with the current timestamp
+    window.addEventListener("DOMContentLoaded", () => {
+      refreshPreviewWithTimestamp();
+
+      // Set up a mutation observer to watch for style changes
+      const styleObserver = new MutationObserver(() => {
+        refreshPreviewWithTimestamp();
+      });
+
+      // Observe changes to the style inputs
+      document.querySelectorAll("#styleForm input").forEach((input) => {
+        input.addEventListener("change", () => {
+          refreshPreviewWithTimestamp();
+        });
+      });
+    });
+
+    // Auto-save functionality with debounce
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(context, args);
+        }, delay);
+      };
+    };
+
+    // Set up auto-save for content forms
+    document
+      .querySelectorAll("#contentForm textarea, #contentForm input")
+      .forEach((element) => {
+        element.addEventListener(
+          "input",
+          debounce(() => {
+            handleFormSubmit(
+              "contentForm",
+              "/admin/save-content",
+              "home-content-status"
+            );
+          }, 2000)
+        );
+      });
+
+    // Responsive sidebar toggle for mobile
+    const sidebarToggle = document.createElement("button");
+    sidebarToggle.className = "sidebar-toggle btn btn-primary";
+    sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    sidebarToggle.style.position = "fixed";
+    sidebarToggle.style.bottom = "20px";
+    sidebarToggle.style.right = "20px";
+    sidebarToggle.style.zIndex = "1000";
+    sidebarToggle.style.display = "none";
+    document.body.appendChild(sidebarToggle);
+
+    sidebarToggle.addEventListener("click", () => {
+      document.querySelector(".sidebar").classList.toggle("active");
+    });
+
+    function checkScreenSize() {
+      if (window.innerWidth <= 768) {
+        sidebarToggle.style.display = "block";
+        document.querySelector(".sidebar").classList.remove("active");
+      } else {
+        sidebarToggle.style.display = "none";
+        document.querySelector(".sidebar").classList.add("active");
+      }
+    }
+
+    window.addEventListener("resize", checkScreenSize);
+    checkScreenSize();
+    // Role CRUD
+    document
+      .getElementById("roleForm")
+      .addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const roleName = document.getElementById("role_name").value.trim();
+        const statusEl = document.getElementById("role-status");
+        if (!roleName) {
+          showAlert("Role name cannot be empty.", "error", statusEl);
+          return;
+        }
+        try {
+          const response = await fetch("/admin/roles", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: roleName }),
+          });
+          const result = await response.json();
+          if (result.success) {
+            showAlert(result.message, "success", statusEl);
+            setTimeout(() => window.location.reload(), 1000);
+          } else {
+            showAlert(result.message, "error", statusEl);
+          }
+        } catch (err) {
+          showAlert("Failed to add role.", "error", statusEl);
+        }
+      });
+
+    document.querySelectorAll(".delete-role").forEach((btn) => {
+      btn.addEventListener("click", async function () {
+        if (!confirm("Are you sure you want to delete this role?")) return;
+        const id = this.dataset.id;
+        try {
+          const response = await fetch(`/admin/roles/${id}`, {
+            method: "DELETE",
+          });
+          const result = await response.json();
+          if (result.success) {
+            setTimeout(() => window.location.reload(), 500);
+          } else {
+            alert(result.message);
+          }
+        } catch (err) {
+          alert("Failed to delete role.");
+        }
+      });
+    });
+
+    // You can add similar JS for editing roles if needed.
+
+    // Toggle between Users and Messages info
+    // const usersBtn = document.getElementById('usersBtn');
+    // const messagesBtn = document.getElementById('messagesBtn');
+    // const usersInfo = document.getElementById('usersInfo');
+    // const messagesInfo = document.getElementById('messagesInfo');
+    // const pendingAdminsBtn = document.getElementById('pendingAdminsBtn');
+    // const pendingAdminsInfo = document.getElementById('pendingAdminsInfo');
+
+    function setActive(btn, info) {
+      usersBtn.classList.remove("btn-primary");
+      usersBtn.classList.add("btn-outline");
+      messagesBtn.classList.remove("btn-primary");
+      messagesBtn.classList.add("btn-outline");
+      pendingAdminsBtn.classList.remove("btn-primary");
+      pendingAdminsBtn.classList.add("btn-outline");
+      usersInfo.style.display = "none";
+      messagesInfo.style.display = "none";
+      pendingAdminsInfo.style.display = "none";
+
+      btn.classList.remove("btn-outline");
+      btn.classList.add("btn-primary");
+      info.style.display = "block";
+    }
+
+    usersBtn.addEventListener("click", () => setActive(usersBtn, usersInfo));
+    messagesBtn.addEventListener("click", () =>
+      setActive(messagesBtn, messagesInfo)
+    );
+    pendingAdminsBtn.addEventListener("click", () =>
+      setActive(pendingAdminsBtn, pendingAdminsInfo)
+    );
+
+    // Set default active
+    setActive(usersBtn, usersInfo);
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script>
+    // Connect to SocketIO
+    const socket = io();
+    document.addEventListener("DOMContentLoaded", function () {
+      // Activate dashboard by default
+      document
+        .querySelector('.nav-link[data-section="dashboard"]')
+        .classList.add("active");
+      document.getElementById("dashboard-section").classList.add("active");
+
+      // Deactivate styles tab by default
+      document
+        .querySelector('.nav-link[data-section="styles"]')
+        .classList.remove("active");
+      document.getElementById("styles-section").classList.remove("active");
+
+      // Initialize dashboard tabs
+      initDashboardTabs();
+    });
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      if (link.hasAttribute("data-section")) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Update active state
+          document.querySelectorAll(".nav-link").forEach((navLink) => {
+            navLink.classList.remove("active");
+          });
+          this.classList.add("active");
+
+          // Show the selected section
+          const sectionId = this.dataset.section;
+          document
+            .querySelectorAll(".dashboard-section")
+            .forEach((section) => {
+              section.classList.remove("active");
+            });
+          document
+            .getElementById(`${sectionId}-section`)
+            .classList.add("active");
+
+          // Scroll to top
+          window.scrollTo(0, 0);
+        });
+      }
+    });
+    // Function to update the unread count badge
+    function updateUnreadCount(count) {
+      const badge = document.querySelector(".message-count-badge");
+      const messageLink = document.querySelector(".messages-link");
+
+      if (count > 0) {
+        if (!badge) {
+          // Create badge if it doesn't exist
+          const newBadge = document.createElement("span");
+          newBadge.className = "message-count-badge";
+          newBadge.style.cssText = `
+                    background: #ef4444;
+                    color: #fff;
+                    border-radius: 50%;
+                    padding: 4px 10px;
+                    font-size: 0.95em;
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                `;
+          newBadge.textContent = count;
+          messageLink.appendChild(newBadge);
+        } else {
+          // Update existing badge
+          badge.textContent = count;
+          badge.style.display = "block";
+        }
+      } else if (badge) {
+        // Hide badge if count is 0
+        badge.style.display = "none";
+      }
+    }
+
+    // Request initial count when connected
+    socket.on("connect", () => {
+      socket.emit("request_unread_count");
+    });
+
+    // Listen for count updates
+    socket.on("update_unread_count", (data) => {
+      updateUnreadCount(data.count);
+    });
+
+    // Periodically check for new messages (fallback)
+    setInterval(() => {
+      socket.emit("request_unread_count");
+    }, 30000); // Check every 30 seconds
+
+    // Also update when coming back to the page
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        socket.emit("request_unread_count");
+      }
+    });
+
+    // Toggle between Users and Messages info
+    const usersBtn = document.getElementById("usersBtn");
+    const messagesBtn = document.getElementById("messagesBtn");
+    const usersInfo = document.getElementById("usersInfo");
+    const messagesInfo = document.getElementById("messagesInfo");
+    const pendingAdminsBtn = document.getElementById("pendingAdminsBtn");
+    const pendingAdminsInfo = document.getElementById("pendingAdminsInfo");
+
+    function setActive(btn, info) {
+      usersBtn.classList.remove("btn-primary");
+      usersBtn.classList.add("btn-outline");
+      messagesBtn.classList.remove("btn-primary");
+      messagesBtn.classList.add("btn-outline");
+      pendingAdminsBtn.classList.remove("btn-primary");
+      pendingAdminsBtn.classList.add("btn-outline");
+      usersInfo.style.display = "none";
+      messagesInfo.style.display = "none";
+      pendingAdminsInfo.style.display = "none";
+
+      btn.classList.remove("btn-outline");
+      btn.classList.add("btn-primary");
+      info.style.display = "block";
+    }
+
+    usersBtn.addEventListener("click", () => setActive(usersBtn, usersInfo));
+    messagesBtn.addEventListener("click", () =>
+      setActive(messagesBtn, messagesInfo)
+    );
+    pendingAdminsBtn.addEventListener("click", () =>
+      setActive(pendingAdminsBtn, pendingAdminsInfo)
+    );
+
+    // Set default active
+    setActive(usersBtn, usersInfo);
+  </script>
+  <script>
+    // Dashboard tab logic for Users, Messages, Pending Approvals
+    function initDashboardTabs() {
+      const usersBtn = document.getElementById("usersBtn");
+      const messagesBtn = document.getElementById("messagesBtn");
+      const pendingAdminsBtn = document.getElementById("pendingAdminsBtn");
+      const usersInfo = document.getElementById("usersInfo");
+      const messagesInfo = document.getElementById("messagesInfo");
+      const pendingAdminsInfo = document.getElementById("pendingAdminsInfo");
+
+      if (!usersBtn || !messagesBtn || !pendingAdminsBtn) return;
+
+      function setActive(btn, info) {
+        usersBtn.classList.remove("btn-primary");
+        usersBtn.classList.add("btn-outline");
+        messagesBtn.classList.remove("btn-primary");
+        messagesBtn.classList.add("btn-outline");
+        pendingAdminsBtn.classList.remove("btn-primary");
+        pendingAdminsBtn.classList.add("btn-outline");
+        usersInfo.style.display = "none";
+        messagesInfo.style.display = "none";
+        pendingAdminsInfo.style.display = "none";
+
+        btn.classList.remove("btn-outline");
+        btn.classList.add("btn-primary");
+        info.style.display = "block";
+      }
+
+      usersBtn.onclick = () => setActive(usersBtn, usersInfo);
+      messagesBtn.onclick = () => setActive(messagesBtn, messagesInfo);
+      pendingAdminsBtn.onclick = () =>
+        setActive(pendingAdminsBtn, pendingAdminsInfo);
+
+      // Set default active
+      setActive(usersBtn, usersInfo);
+    }
+
+    // Call this after the DOM is ready and after sidebar navigation
+    document.addEventListener("DOMContentLoaded", function () {
+      // Sidebar navigation logic
+      const navLinks = document.querySelectorAll(".nav-link[data-section]");
+      const sections = document.querySelectorAll('section[id$="-section"]');
+      navLinks.forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          navLinks.forEach((l) => l.classList.remove("active"));
+          this.classList.add("active");
+          sections.forEach((sec) => sec.classList.remove("active"));
+          const sectionId = this.getAttribute("data-section") + "-section";
+          const section = document.getElementById(sectionId);
+          if (section) section.classList.add("active");
+          // If dashboard section, re-init dashboard tabs
+          if (sectionId === "dashboard-section") {
+            setTimeout(initDashboardTabs, 0);
+          }
+        });
+      });
+      // Initialize dashboard tabs on page load if dashboard is active
+      if (
+        document
+          .getElementById("dashboard-section")
+          .classList.contains("active")
+      ) {
+        initDashboardTabs();
+      }
+    });
+    // Edit Role
+    document.querySelectorAll(".edit-role").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const li = this.closest("li");
+        li.querySelector(".role-name").style.display = "none";
+        li.querySelector(".edit-role-input").style.display = "inline-block";
+        li.querySelector(".save-role").style.display = "inline-block";
+        li.querySelector(".cancel-edit-role").style.display = "inline-block";
+        this.style.display = "none";
+      });
+    });
+
+    // Cancel Edit
+    document.querySelectorAll(".cancel-edit-role").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const li = this.closest("li");
+        li.querySelector(".role-name").style.display = "inline";
+        li.querySelector(".edit-role-input").style.display = "none";
+        li.querySelector(".save-role").style.display = "none";
+        li.querySelector(".edit-role").style.display = "inline-block";
+        this.style.display = "none";
+      });
+    });
+
+    // Save Edit
+    document.querySelectorAll(".save-role").forEach((btn) => {
+      btn.addEventListener("click", async function () {
+        const li = this.closest("li");
+        const roleId = this.dataset.id;
+        const input = li.querySelector(".edit-role-input");
+        const newName = input.value.trim();
+        if (!newName) {
+          alert("Role name cannot be empty.");
+          return;
+        }
+        try {
+          const response = await fetch(`/admin/roles/${roleId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: newName }),
+          });
+          const result = await response.json();
+          if (result.success) {
+            li.querySelector(".role-name").textContent = newName;
+            li.querySelector(".role-name").style.display = "inline";
+            input.style.display = "none";
+            li.querySelector(".save-role").style.display = "none";
+            li.querySelector(".cancel-edit-role").style.display = "none";
+            li.querySelector(".edit-role").style.display = "inline-block";
+          } else {
+            alert(result.message);
+          }
+        } catch (err) {
+          alert("Failed to update role.");
+        }
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      // Handle all approve forms
+      document.querySelectorAll(".approve-form").forEach((form) => {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const userId = this.dataset.userId;
+          const row = this.closest("tr");
+
+          fetch(`/admin/approve-user/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Remove the row from the table
+                row.remove();
+
+                // Show success message
+                alert(data.message);
+
+                // If no more pending admins, show the "no pending" message
+                if (document.querySelectorAll("tbody tr").length === 0) {
+                  document.querySelector(".no-pending").style.display =
+                    "block";
+                }
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("An error occurred while approving the user");
+            });
+        });
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      // Handle all approve forms
+      document.querySelectorAll(".approve-form").forEach((form) => {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const userId = this.dataset.userId;
+          const row = this.closest("tr");
+          const button = this.querySelector("button");
+          const originalText = button.innerHTML;
+
+          // Show loading state
+          button.disabled = true;
+          button.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+          fetch(`/admin/approve-user/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              if (data.success) {
+                // Remove the row from the table
+                row.remove();
+
+                // Update pending admins count
+                const pendingCount =
+                  document.querySelectorAll("tbody tr").length;
+                const pendingBadge = document.querySelector(
+                  ".pending-admins-badge"
+                );
+                if (pendingBadge) {
+                  pendingBadge.textContent = pendingCount;
+                  if (pendingCount === 0) {
+                    pendingBadge.style.display = "none";
+                  }
+                }
+
+                // If no more pending admins, show the "no pending" message
+                if (pendingCount === 0) {
+                  document.querySelector(".no-pending").style.display =
+                    "block";
+                }
+
+                // Show success toast/notification
+                showAlert(data.message, "success", "pending-admins-status");
+              } else {
+                throw new Error(data.message || "Approval failed");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showAlert(
+                error.message || "An error occurred while approving the user",
+                "error",
+                "pending-admins-status"
+              );
+            })
+            .finally(() => {
+              button.disabled = false;
+              button.innerHTML = originalText;
+            });
+        });
+      });
+
+      function showAlert(message, type, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.textContent = message;
+        container.className = `alert alert-${type}`;
+        container.style.display = "block";
+
+        setTimeout(() => {
+          container.style.display = "none";
+        }, 5000);
+      }
+    });
+    // Email Settings Form
+    // Email Settings Form
+    // Email Settings Form
+    // Email Settings Form
+    document
+      .getElementById("emailSettingsForm")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = document.getElementById("emailSettingsForm");
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const statusEl = document.getElementById("email-settings-status");
+        const originalBtnText = submitBtn.textContent;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+
+        try {
+          const formData = new FormData(form);
+          const data = {
+            admin_email: formData.get("admin_email"),
+            smtp_password: formData.get("smtp_password") || undefined, // Only send if changed
+          };
+
+          const response = await fetch("/admin/email-settings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showAlert(result.message, "success", statusEl);
+            // Clear password field after successful save
+            document.getElementById("smtp_password").value = "";
+          } else {
+            throw new Error(
+              result.message || "Failed to save email settings"
+            );
+          }
+        } catch (error) {
+          showAlert(error.message, "error", statusEl);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      });
+
+    // Load current email settings when page loads
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const response = await fetch("/admin/email-settings");
+        if (response.ok) {
+          const settings = await response.json();
+          if (settings.admin_email) {
+            document.getElementById("admin_email").value =
+              settings.admin_email;
+            // Don't pre-fill password for security reasons
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load email settings:", error);
+      }
+    });
+  </script>
+</body>
+
+</html>

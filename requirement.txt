@@ -1,0 +1,8 @@
+Flask-SocketIO
+eventlet
+Flask-PyMongo
+Flask-Login
+werkzeug
+PyMongo
+itsdangerous
+email-validator

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-dark: #3730a3;
+      --text-color: #1f2937;
+      --light-text: #6b7280;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    body {
+      background-color: #f8fafc;
+      color: var(--text-color);
+    }
+    
+    .navbar {
+      background-color: var(--primary-dark);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 600;
+      color: white !important;
+    }
+    
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      margin: 0 0.15rem;
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    
+    .notification-container {
+      position: relative;
+    }
+    
+    .dashboard-card {
+      transition: all 0.3s ease;
+      border-radius: var(--border-radius);
+      border: none;
+      box-shadow: var(--box-shadow);
+      height: 100%;
+      border-top: 3px solid var(--primary-color);
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    
+    .activity-card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .activity-item {
+      border-left: none;
+      border-right: none;
+      padding: 1rem 1.25rem;
+    }
+    
+    .activity-item:first-child {
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar - Original Logic Preserved -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('user_home') if current_user.is_authenticated else url_for('guest_home') }}">
+        <i class="fas fa-user me-2"></i>User Portal
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('user_home') if current_user.is_authenticated else url_for('guest_home') }}">
+              <i class="fas fa-home me-1"></i> Home
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          {% if current_user.is_authenticated %}
+            <li class="nav-item notification-container">
+              <a class="nav-link" href="{{ url_for('user_admin_messages') }}" id="notification-icon">
+                <i class="fas fa-bell me-1"></i> Notifications
+                <span class="notification-badge" id="notification-count" style="display: none;">0</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('profile') }}">
+                <i class="fas fa-user me-1"></i> Profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('user_message') }}">
+                <i class="fas fa-comment me-1"></i> Messages
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('change_password') }}">
+                <i class="fas fa-key me-1"></i> Change Password
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="http://127.0.0.1:5001">
+                <i class="fas fa-key me-1"></i> Prediction
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login_page') }}">
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('register') }}">
+                <i class="fas fa-user-plus me-1"></i> Register
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content - Original Logic Preserved -->
+  <div class="container py-4">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <h4><i class="fas fa-user me-2"></i>Welcome to Your Dashboard</h4>
+      <p class="mb-0">You're logged in as <strong>User</strong></p>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <!-- <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+          <div class="card-body text-center py-4">
+            <div class="card-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h5>Analytics</h5>
+            <p class="text-muted">View your activity statistics</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+          <div class="card-body text-center py-4">
+            <div class="card-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h5>Messages</h5>
+            <p class="text-muted">Check your inbox (3 new)</p>
+            <a href="#" class="btn btn-primary">View Messages</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+          <div class="card-body text-center py-4">
+            <div class="card-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <h5>Settings</h5>
+            <p class="text-muted">Manage your account preferences</p>
+            <a href="#" class="btn btn-primary">Go to Settings</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Recent Activity Section -->
+    <!-- <div class="row">
+      <div class="col-12">
+        <div class="card activity-card">
+          <div class="card-header">
+            <h5><i class="fas fa-bell me-2"></i>Recent Activity</h5>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item activity-item d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-sign-in-alt text-success me-2"></i>Logged in</span>
+                <span class="badge bg-light text-dark">Just now</span>
+              </li>
+              <li class="list-group-item activity-item d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-file-upload text-primary me-2"></i>Uploaded document</span>
+                <span class="badge bg-light text-dark">2 hours ago</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Notification sound (hidden audio element) -->
+  <audio id="notification-sound" preload="auto">
+    <source src="{{ url_for('static', filename='sounds/notification.mp3') }}" type="audio/mpeg">
+  </audio>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Socket.io -->
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  
+  <!-- Original JavaScript Preserved -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Socket.IO connection
+      const socket = io();
+      const notificationSound = document.getElementById('notification-sound');
+      
+      // Get initial unread count
+      fetch('/get-unread-admin-messages-count')
+        .then(response => response.json())
+        .then(data => {
+          if (data.count > 0) {
+            document.getElementById('notification-count').textContent = data.count;
+            document.getElementById('notification-count').style.display = 'flex';
+          }
+        });
+      
+      // Listen for new admin messages
+      socket.on('new_admin_message', function(data) {
+        // Update notification count
+        const badge = document.getElementById('notification-count');
+        const currentCount = parseInt(badge.textContent) || 0;
+        const newCount = currentCount + 1;
+        badge.textContent = newCount;
+        badge.style.display = 'flex';
+        
+        // Play notification sound
+        notificationSound.play();
+        
+        // Show desktop notification if permitted
+        if (Notification.permission === 'granted') {
+          new Notification('New Message from Admin', {
+            body: 'You have a new message from the administrator',
+            icon: '/static/images/notification-icon.png'
+          });
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              new Notification('New Message from Admin', {
+                body: 'You have a new message from the administrator',
+                icon: '/static/images/notification-icon.png'
+              });
+            }
+          });
+        }
+      });
+      
+      // When user clicks the notification icon, mark messages as read
+      document.getElementById('notification-icon').addEventListener('click', function() {
+        fetch('/mark-admin-messages-read', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(() => {
+          document.getElementById('notification-count').style.display = 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

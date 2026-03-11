@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Error</title>
+</head>
+<body>
+    <h1>500 - Server Error</h1>
+    <p>We're experiencing technical difficulties. Please try again later.</p>
+    {% if config.DEBUG %}
+    <pre>{{ error }}</pre>
+    {% endif %}
+</body>
+</html>

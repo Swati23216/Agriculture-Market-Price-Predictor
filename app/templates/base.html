@@ -1,0 +1,24 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+</head>
+<body>
+    <!-- Navbar using dynamic data from MongoDB -->
+    {% set nav = navbar_settings %}
+    <img src="{{ navbar.logo }}" alt="Logo">
+<h1>{{ navbar.site_name }}</h1>
+<nav>
+  {% for tab in navbar.tabs %}
+    <a href="{{ tab.link }}">{{ tab.name }}</a>
+  {% endfor %}
+</nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

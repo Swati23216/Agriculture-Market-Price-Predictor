@@ -1,0 +1,40 @@
+
+    :root {
+        --primary-color: #ffea00;
+        --background-color: #ffffff;
+        --font-family: cursive;
+        --text-color: #1f2937;
+        --button-bg: #ffd500;
+        --button-text: #ffffff;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .primary {
+        color: var(--primary-color);
+    }
+    .button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+    .button {
+        background-color: var(--button-bg);
+        color: var(--button-text);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .card {
+        border: 1px solid var(--primary-color);
+        padding: 15px;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+    
